@@ -1,108 +1,691 @@
 
-<section class="page" id="wallet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenneth RentalShop</title>
+<style>
+:root {
+  font-family: Arial, sans-serif;
+  color: #17253e;
+  background: #f7f9fd;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+header {
+  background: white;
+  border-bottom: 1px solid #e4e9f2;
+  padding: 18px 4%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.brand {
+  font-weight: 800;
+  font-size: 21px;
+  margin-right: auto;
+}
+.brand span { color: #2563eb; }
+nav {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 15px;
+  background: #edf2fa;
+  color: #24436f;
+}
+button:hover { filter: brightness(.97); }
+button.active, .primary {
+  background: linear-gradient(#478bff, #1553c7);
+  color: white;
+  box-shadow: inset 0 2px #9ac4ff;
+}
+button:disabled { opacity: .5; cursor: not-allowed; }
+.userbar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.balance {
+  background: #edf4ff;
+  border-radius: 20px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+main {
+  max-width: 1120px;
+  margin: 40px auto;
+  padding: 0 18px;
+  min-height: 67vh;
+}
+.page { display: none; }
+.page.active { display: block; }
+h1 { font-size: 26px; }
+h2 { font-size: 20px; }
+.panel {
+  background: white;
+  border: 1px solid #e8edf4;
+  border-radius: 18px;
+  padding: 26px;
+  margin: 18px 0;
+  box-shadow: 0 10px 30px #193e7210;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+.product { text-align: center; }
+.art {
+  height: 170px;
+  background: white;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 22px #0002;
+  margin-bottom: 20px;
+}
+.art img {
+  max-height: 125px;
+  max-width: 80%;
+  object-fit: contain;
+}
+.product button { min-width: 155px; }
+.muted { color: #66768c; }
+.wallet {
+  background: linear-gradient(125deg, #347afa, #173eaa);
+  color: white;
+  padding: 28px;
+  border-radius: 20px;
+}
+.wallet strong {
+  font-size: 40px;
+  display: block;
+  margin: 12px 0 25px;
+}
+.wallet button {
+  background: white;
+  color: #1c4ec1;
+}
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 18px 0 7px;
+}
+input, select {
+  padding: 12px;
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  font: inherit;
+}
+.auth {
+  max-width: 450px;
+  margin: 0 auto;
+}
+.notice {
+  padding: 15px;
+  background: #eef4ff;
+  border-radius: 12px;
+  color: #36537a;
+  margin: 20px 0;
+}
+.error { color: #c42a2a; }
+.success { color: #128346; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td, th {
+  padding: 13px;
+  border-bottom: 1px solid #e8edf4;
+  text-align: left;
+}
+footer {
+  background: white;
+  padding: 25px;
+  text-align: center;
+  color: #66768c;
+  border-top: 1px solid #e4e9f2;
+}
+.hidden { display: none !important; }
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pill {
+  padding: 5px 10px;
+  background: #e9f4eb;
+  color: #14793a;
+  border-radius: 20px;
+  font-size: 12px;
+}
+@media (max-width: 650px) {
+  header { padding: 16px; }
+  main { margin: 22px auto; }
+  .brand { width: 100%; }
+  nav button { font-size: 13px; padding: 9px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">🔹 Kenneth <span>RentalShop</span></div>
+
+  <nav>
+    <button data-page="tools" class="active">Tools</button>
+    <button data-page="servers">Servers</button>
+    <button data-page="wallet">My Wallet</button>
+    <button data-page="rentals">Active Rentals</button>
+    <button data-page="billing">Billing</button>
+    <button data-page="history">History</button>
+    <button data-page="admin" class="hidden" id="adminNav">Admin</button>
+  </nav>
+
+  <div class="userbar">
+    <div class="balance" id="balanceLink">
+      💳 <b id="headerBalance">₱0.00</b>
+    </div>
+    <span id="who">Guest</span>
+    <button id="authBtn" class="primary">Login</button>
+    <button id="logoutBtn" class="hidden">Logout</button>
+  </div>
+</header>
+
+<main>
+
+<section id="tools" class="page active">
+  <h1>Software Account Rental</h1>
+  <div class="grid" id="toolGrid"></div>
+</section>
+
+<section id="servers" class="page">
+  <h1>Server Registration</h1>
+  <div class="grid" id="serverGrid"></div>
+</section>
+
+<section id="wallet" class="page">
   <h1>My Wallet</h1>
 
-  <div class="wallet-card">
-    <p>Available Wallet Balance</p>
-    <h2 id="myWalletBalance">₱0.00</h2>
-    <button class="btn" onclick="document.getElementById('topupForm').scrollIntoView({behavior:'smooth'})">
-      + Top Up Wallet
-    </button>
-  </div>
-
-  <div class="wallet-summary">
-    <div class="summary-item">
-      <small>Total Approved Top Ups</small>
-      <strong id="totalTopups">₱0.00</strong>
-    </div>
-    <div class="summary-item">
-      <small>Total Purchases</small>
-      <strong id="totalPurchases">₱0.00</strong>
-    </div>
-    <div class="summary-item">
-      <small>Pending Top Ups</small>
-      <strong id="pendingTopups">₱0.00</strong>
-    </div>
-  </div>
-
-  <div class="panel" id="topupForm">
-    <h2>Top Up Wallet</h2>
-    <p>Select your preferred amount.</p>
-
-    <div class="prices" id="topupAmounts">
-      <div class="price" onclick="selectTopup(100)">
-        <strong>₱100</strong><small>Top Up</small>
-      </div>
-      <div class="price" onclick="selectTopup(200)">
-        <strong>₱200</strong><small>Top Up</small>
-      </div>
-      <div class="price" onclick="selectTopup(500)">
-        <strong>₱500</strong><small>Top Up</small>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Custom Top Up Amount (₱)</label>
-      <input type="number" id="topupAmount" min="50" max="100000"
-             step="0.01" placeholder="Enter amount"
-             oninput="updateTopupSelection()">
-    </div>
-
-    <h3>Choose Payment Method</h3>
-
-    <div class="payment-methods">
-      <label class="payment-method selected" onclick="selectPayment('GCash')">
-        <input type="radio" name="paymentMethod" value="GCash" checked>
-        <strong>GCash</strong>
-      </label>
-      <label class="payment-method" onclick="selectPayment('Maya')">
-        <input type="radio" name="paymentMethod" value="Maya">
-        <strong>Maya</strong>
-      </label>
-      <label class="payment-method" onclick="selectPayment('Bank Transfer')">
-        <input type="radio" name="paymentMethod" value="Bank Transfer">
-        <strong>Bank Transfer</strong>
-      </label>
-    </div>
-
-    <div class="notice">
-      <strong>Payment Instructions</strong>
-      <p>Contact Kenneth RentalShop support to confirm the official payment account before sending money.</p>
-      <a href="https://www.messenger.com/j/AbZh4JBHX2UHVOcu/?send_source=gc%3Acopy_invite_link_c"
-         target="_blank" rel="noopener">
-        Contact Support on Messenger
-      </a>
-    </div>
-
-    <div class="form-group">
-      <label>Payment Reference Number</label>
-      <input id="paymentReference" placeholder="Enter transaction reference number">
-    </div>
-
-    <div class="notice">
-      Wallet credits are added only after payment has been verified and the administrator approves the request.
-    </div>
-
-    <button class="btn" style="width:100%" onclick="requestTopup()">
-      Submit Top Up Request
-    </button>
+  <div class="wallet">
+    <div>Available Balance</div>
+    <strong id="walletBalance">₱0.00</strong>
+    <button id="topupButton">Top Up Wallet</button>
   </div>
 
   <div class="panel">
-    <h2>Top Up History</h2>
-    <div class="tablewrap">
+    <h2>Payment Methods</h2>
+    <p>GCash · Maya · Debit / Credit Card</p>
+
+    <div class="notice">
+      Automatic top-ups are not enabled yet.
+      A payment gateway and verified server-side webhook
+      must be connected before payments can be accepted
+      and wallet balances credited.
+      No payment is collected here.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Wallet Activity</h2>
+    <p class="muted">
+      Transaction history will appear here after the secure
+      payment and order system is connected.
+    </p>
+  </div>
+</section>
+
+<section id="rentals" class="page">
+  <h1>Active Rentals</h1>
+  <div class="panel">
+    <p class="muted">
+      Rental accounts will appear here once secure checkout
+      and stock management are connected.
+    </p>
+  </div>
+</section>
+
+<section id="billing" class="page">
+  <h1>Billing</h1>
+  <div class="panel">
+    <h2>
+      Current Wallet Balance:
+      <span id="billingBalance">₱0.00</span>
+    </h2>
+    <button data-page="wallet" class="primary">
+      View My Wallet
+    </button>
+  </div>
+</section>
+
+<section id="history" class="page">
+  <h1>Purchase History</h1>
+  <div class="panel">
+    <p class="muted">
+      No purchases recorded in Supabase yet.
+    </p>
+  </div>
+</section>
+
+<section id="admin" class="page">
+  <h1>
+    Administrator Dashboard
+    <span class="pill">Admin only</span>
+  </h1>
+
+  <div class="panel">
+    <div class="row">
+      <h2>Registered Accounts</h2>
+      <button id="reloadUsers">Refresh</button>
+    </div>
+
+    <div style="overflow:auto">
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Reference</th>
-            <th>Status</th>
+            <th>User</th>
+            <th>Wallet Balance</th>
+            <th>Created</th>
           </tr>
         </thead>
-        <tbody id="topupHistory"></tbody>
+        <tbody id="usersBody"></tbody>
       </table>
     </div>
+
+    <p class="muted">
+      Wallet modifications, payment approvals, and stock
+      administration require additional secure backend functions.
+    </p>
   </div>
 </section>
+
+<section id="login" class="page">
+  <div class="panel auth">
+    <h1>Login</h1>
+
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      <p>
+        <button class="primary" id="loginSubmit" type="submit">
+          Login to Account
+        </button>
+      </p>
+    </form>
+
+    <p id="loginMessage" role="status"></p>
+    <p class="muted">
+      Use your existing Supabase admin or buyer account.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Kenneth RentalShop © 2026 ·
+  <a
+    href="https://www.messenger.com/j/AbZh4JBHX2UHVOcu/?send_source=gc%3Acopy_invite_link_c"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Contact Support
+  </a>
+</footer>
+
+<script type="module">
+import { createClient } from
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL =
+  'https://qrhtqaltroccnrpqicrn.supabase.co';
+
+const SUPABASE_PUBLISHABLE_KEY =
+  'sb_publishable_o5cRbS4TtxFjXN3K03HQ4w_E9XEGjKe';
+
+const supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+let user = null;
+let role = 'buyer';
+let balance = 0;
+
+const $ = id => document.getElementById(id);
+
+const money = n =>
+  '₱' + Number(n || 0).toLocaleString('en-PH', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+const products = [
+  {
+    name: 'UnlockTool',
+    type: 'tool',
+    img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp4PaWp7tw2k22dAhMLvWxwe6NrfWj9k1t3RsnX0KZiA&s=10',
+    price: '₱100 / 6 hours'
+  },
+  {
+    name: 'TSM Tool',
+    type: 'tool',
+    img: 'https://tsm-tool.com/static/imgs/TSMUK.png?v=1726190012',
+    price: '₱100 / 6 hours'
+  },
+  {
+    name: 'TFM Tool',
+    type: 'tool',
+    price: 'Contact support'
+  },
+  {
+    name: 'AMT',
+    type: 'tool',
+    price: 'Contact support'
+  },
+  {
+    name: 'Sigma Plus',
+    type: 'tool',
+    price: 'Contact support'
+  },
+  {
+    name: 'EFT Pro',
+    type: 'tool',
+    price: 'Contact support'
+  },
+  {
+    name: 'UniTool',
+    type: 'server',
+    price: '₱350'
+  },
+  {
+    name: 'FAOU Activator',
+    type: 'server',
+    price: 'Contact support'
+  }
+];
+
+function renderProducts() {
+  for (const type of ['tool', 'server']) {
+    const parent = $(
+      type === 'tool' ? 'toolGrid' : 'serverGrid'
+    );
+
+    parent.replaceChildren();
+
+    for (const p of products.filter(x => x.type === type)) {
+      const card = document.createElement('div');
+      card.className = 'product';
+
+      const art = document.createElement('div');
+      art.className = 'art';
+
+      if (p.img) {
+        const img = document.createElement('img');
+        img.src = p.img;
+        img.alt = p.name;
+        art.append(img);
+      } else {
+        art.textContent = type === 'tool' ? '⚙️' : '📱';
+        art.style.fontSize = '50px';
+      }
+
+      const btn = document.createElement('button');
+      btn.className = 'primary';
+      btn.textContent = p.name;
+
+      btn.onclick = () => alert(
+        p.name + ' — ' + p.price +
+        '\n\nSecure checkout is not enabled yet.' +
+        '\nContact support to order.'
+      );
+
+      card.append(art, btn);
+      parent.append(card);
+    }
+  }
+}
+
+function showPage(page) {
+  if (page === 'admin' && (!user || role !== 'admin')) {
+    page = 'tools';
+  }
+
+  document.querySelectorAll('.page').forEach(el => {
+    el.classList.toggle('active', el.id === page);
+  });
+
+  document.querySelectorAll('[data-page]').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+
+  if (page === 'admin') {
+    loadAdminUsers();
+  }
+
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll('[data-page]').forEach(button => {
+  button.addEventListener('click', () => {
+    showPage(button.dataset.page);
+  });
+});
+
+$('balanceLink').onclick = () => {
+  showPage(user ? 'wallet' : 'login');
+};
+
+$('authBtn').onclick = () => showPage('login');
+
+$('topupButton').onclick = () => {
+  alert(
+    'Payment processing is not enabled yet.' +
+    '\nDo not send money until the payment gateway is connected.'
+  );
+};
+
+$('logoutBtn').onclick = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  user = null;
+  role = 'buyer';
+  balance = 0;
+
+  updateUI();
+  showPage('tools');
+};
+
+function updateUI() {
+  const logged = !!user;
+
+  $('who').textContent = logged
+    ? (user.email || 'Account')
+    : 'Guest';
+
+  $('authBtn').classList.toggle('hidden', logged);
+  $('logoutBtn').classList.toggle('hidden', !logged);
+
+  $('adminNav').classList.toggle(
+    'hidden',
+    !logged || role !== 'admin'
+  );
+
+  for (const id of [
+    'headerBalance',
+    'walletBalance',
+    'billingBalance'
+  ]) {
+    $(id).textContent = money(balance);
+  }
+}
+
+async function refreshAccount() {
+  const {
+    data: { user: current },
+    error
+  } = await supabase.auth.getUser();
+
+  user = error ? null : current;
+
+  role = user?.app_metadata?.role === 'admin'
+    ? 'admin'
+    : 'buyer';
+
+  balance = 0;
+
+  if (user) {
+    const {
+      data,
+      error: profileError
+    } = await supabase
+      .from('profiles')
+      .select('wallet_balance')
+      .eq('user_id', user.id)
+      .single();
+
+    if (profileError) {
+      console.error(
+        'Profile error:',
+        profileError.message
+      );
+    } else {
+      balance = Number(data.wallet_balance);
+    }
+  }
+
+  updateUI();
+}
+
+$('loginForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const btn = $('loginSubmit');
+  const msg = $('loginMessage');
+
+  btn.disabled = true;
+  msg.textContent = 'Signing in…';
+  msg.className = 'muted';
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: $('email').value.trim(),
+    password: $('password').value
+  });
+
+  btn.disabled = false;
+
+  if (error) {
+    msg.textContent = error.message;
+    msg.className = 'error';
+    return;
+  }
+
+  $('password').value = '';
+
+  await refreshAccount();
+
+  msg.textContent = '';
+
+  showPage(
+    role === 'admin' ? 'admin' : 'wallet'
+  );
+});
+
+async function loadAdminUsers() {
+  if (!user || role !== 'admin') return;
+
+  const tbody = $('usersBody');
+  tbody.replaceChildren();
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('display_name,wallet_balance,created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+
+    td.colSpan = 3;
+    td.textContent =
+      'Unable to load profiles: ' + error.message;
+
+    tr.append(td);
+    tbody.append(tr);
+    return;
+  }
+
+  for (const profile of data || []) {
+    const tr = document.createElement('tr');
+
+    const values = [
+      profile.display_name || 'User',
+      money(profile.wallet_balance),
+      new Date(profile.created_at).toLocaleDateString()
+    ];
+
+    for (const value of values) {
+      const td = document.createElement('td');
+      td.textContent = value;
+      tr.append(td);
+    }
+
+    tbody.append(tr);
+  }
+}
+
+$('reloadUsers').onclick = loadAdminUsers;
+
+supabase.auth.onAuthStateChange((event) => {
+  if (event === 'SIGNED_OUT') {
+    user = null;
+    role = 'buyer';
+    balance = 0;
+    updateUI();
+    showPage('tools');
+  }
+});
+
+renderProducts();
+await refreshAccount();
+
+showPage(
+  user && role === 'admin' ? 'admin' : 'tools'
+);
+</script>
+
+</body>
+</html>
