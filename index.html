@@ -1,860 +1,108 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kenneth RentalShop</title>
-<style>
-:root {
-  --blue:#2563eb;
-  --dark:#1c3155;
-  --line:#e5eaf2;
-  --bg:#f8f9fc;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#18243a}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-header{background:white;border-bottom:1px solid var(--line);padding:12px 4%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.brand{font-weight:800;font-size:19px;cursor:pointer}
-.brand span{color:var(--blue)}
-nav{display:flex;gap:6px;flex-wrap:wrap}
-nav button{border:0;background:transparent;color:#576174;padding:10px 12px;border-radius:7px}
-nav button.active{background:var(--blue);color:white}
-.userbar{display:flex;align-items:center;gap:10px;font-size:13px;flex-wrap:wrap}
-.balance{background:#f0f4fa;border-radius:30px;padding:9px 13px}
-.wallet-click{cursor:pointer;transition:.2s}
-.wallet-click:hover{background:#e1ecff;transform:translateY(-1px)}
-.btn{background:linear-gradient(#438aff,#1250c4);color:white;border:1px solid #1745a0;border-radius:7px;padding:11px 18px;box-shadow:inset 0 2px 2px #9dc5ff,0 3px 5px #bbb}
-.btn:hover{filter:brightness(1.08)}
-.btn.secondary{background:white;color:var(--dark);border:1px solid #ccd5e3;box-shadow:none}
-.btn.danger{background:#c92838;border-color:#a61d2b}
-.btn.small{padding:7px 10px;font-size:12px}
-main{max-width:1100px;margin:0 auto;padding:45px 20px;min-height:72vh}
-.page{display:none}
-.page.active{display:block}
-h1{font-size:24px;margin:0 0 25px}
-.products{display:grid;grid-template-columns:repeat(3,1fr);gap:38px 45px;max-width:850px;margin:auto}
-.product{text-align:center;cursor:pointer}
-.product-img{height:190px;background:white;border-radius:30px;box-shadow:-12px 16px 16px #0003;display:flex;align-items:center;justify-content:center;padding:25px;transition:.2s}
-.product:hover .product-img{transform:translateY(-5px)}
-.product-img img{max-width:100%;max-height:145px;object-fit:contain}
-.product-name{margin-top:18px;min-width:145px}
-.panel{background:white;border-radius:25px;padding:30px;box-shadow:0 12px 30px #00000012;max-width:850px;margin:0 auto 25px}
-.panel h2{margin-top:0}
-.form-group{margin-bottom:17px}
-label{display:block;margin-bottom:7px;font-size:14px;font-weight:600}
-input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:white}
-input:focus,select:focus,textarea:focus{outline:2px solid #a4c4ff}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:30px 0}
-.price{background:#fff;border:2px solid #e2e7f0;border-radius:15px;padding:20px 10px;text-align:center;cursor:pointer}
-.price.selected{background:#3674d3;border-color:#3674d3;color:white;box-shadow:0 8px 14px #0003}
-.price strong{display:block;font-size:22px;margin-bottom:12px}
-.price span{display:block;font-size:19px}
-.price small{display:block;margin-top:10px}
-footer{background:white;border-top:1px dashed #cbd5e1;padding:25px 4%;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;font-size:12px;color:#697386}
-footer a{color:#697386;margin-left:15px}
-.modal{position:fixed;inset:0;background:#17233b80;display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
-.modal.show{display:flex}
-.modal-box{background:white;border-radius:30px;padding:32px;max-width:700px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 15px 40px #0003;position:relative}
-.close{position:absolute;right:20px;top:14px;border:0;background:none;font-size:28px}
-.modal-head{display:flex;align-items:center;gap:25px}
-.modal-head img{width:110px;height:110px;object-fit:contain}
-a{color:#3973c1}
-.notice{padding:13px;background:#eff5ff;border-radius:9px;margin:12px 0;font-size:14px}
-.error{color:#c62828}
-.success{color:#16803d}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left}
-.tablewrap{overflow-x:auto}
-.hidden{display:none!important}
-.empty{text-align:center;color:#8993a3;padding:35px}
-.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.status{font-weight:bold;color:#2766cf}
-.wallet-card{background:linear-gradient(135deg,#2563eb,#123a9a);color:white;border-radius:22px;padding:28px;margin-bottom:25px}
-.wallet-card p{color:#dce9ff;margin:0 0 12px}
-.wallet-card h2{font-size:38px;margin:0 0 20px}
-.wallet-card .btn{background:white;color:#1748ae;border-color:white;box-shadow:none}
-.wallet-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}
-.summary-item{background:white;border:1px solid var(--line);border-radius:15px;padding:18px}
-.summary-item small{display:block;color:#64748b;margin-bottom:10px}
-.summary-item strong{font-size:20px}
-.payment-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0 25px}
-.payment-method{border:2px solid #e2e8f0;border-radius:12px;padding:18px;text-align:center;cursor:pointer;background:white}
-.payment-method.selected{border-color:var(--blue);background:#eff6ff}
-.payment-method strong{display:block;margin-top:8px}
-.payment-method input{width:auto}
-@media(max-width:700px){
-.products{grid-template-columns:repeat(2,1fr);gap:22px}
-.product-img{height:145px;padding:15px;border-radius:20px}
-.product-img img{max-height:110px}
-.product-name{min-width:0;width:100%}
-.prices{gap:7px}
-.price{padding:14px 5px}
-.price strong{font-size:17px}
-.price span{font-size:15px}
-.grid2{grid-template-columns:1fr}
-.wallet-summary{grid-template-columns:1fr}
-.payment-methods{grid-template-columns:1fr}
-.modal-head{flex-direction:column}
-header{justify-content:center}
-}
-</style>
-</head>
-<body>
-
-<header>
-<div class="brand" onclick="showPage('tools')">🔹 Kenneth <span>RentalShop</span></div>
-<nav>
-<button onclick="showPage('tools')" class="active" data-page="tools">Tools</button>
-<button onclick="showPage('servers')" data-page="servers">Servers</button>
-<button onclick="showPage('wallet')" data-page="wallet">My Wallet</button>
-<button onclick="showPage('rentals')" data-page="rentals">Active Rentals</button>
-<button onclick="showPage('billing')" data-page="billing">Billing</button>
-<button onclick="showPage('history')" data-page="history">History</button>
-<button id="adminNav" class="hidden" onclick="showPage('admin')" data-page="admin">Admin</button>
-</nav>
-<div class="userbar">
-<div class="balance wallet-click" onclick="showPage('wallet')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')showPage('wallet')">
-💳 Bal: <b id="balance">₱0.00</b> | ● Active: <b id="activeCount">0</b> Units
-</div>
-<span id="username">Guest</span>
-<button class="btn" id="authButton" onclick="openAuth()">Login</button>
-<button class="btn secondary hidden" id="logoutButton" onclick="logout()">Logout</button>
-</div>
-</header>
-
-<main>
-
-<section class="page active" id="tools">
-<div class="products" id="toolProducts"></div>
-</section>
-
-<section class="page" id="servers">
-<div class="products" id="serverProducts"></div>
-</section>
-
 <section class="page" id="wallet">
-<h1>My Wallet</h1>
+  <h1>My Wallet</h1>
 
-<div class="wallet-card">
-<p>Available Wallet Balance</p>
-<h2 id="myWalletBalance">₱0.00</h2>
-<button class="btn" onclick="document.getElementById('topupForm').scrollIntoView({behavior:'smooth'})">+ Top Up Wallet</button>
-</div>
+  <div class="wallet-card">
+    <p>Available Wallet Balance</p>
+    <h2 id="myWalletBalance">₱0.00</h2>
+    <button class="btn" onclick="document.getElementById('topupForm').scrollIntoView({behavior:'smooth'})">
+      + Top Up Wallet
+    </button>
+  </div>
 
-<div class="wallet-summary">
-<div class="summary-item"><small>Total Approved Top Ups</small><strong id="totalTopups">₱0.00</strong></div>
-<div class="summary-item"><small>Total Purchases</small><strong id="totalPurchases">₱0.00</strong></div>
-<div class="summary-item"><small>Pending Top Ups</small><strong id="pendingTopups">₱0.00</strong></div>
-</div>
+  <div class="wallet-summary">
+    <div class="summary-item">
+      <small>Total Approved Top Ups</small>
+      <strong id="totalTopups">₱0.00</strong>
+    </div>
+    <div class="summary-item">
+      <small>Total Purchases</small>
+      <strong id="totalPurchases">₱0.00</strong>
+    </div>
+    <div class="summary-item">
+      <small>Pending Top Ups</small>
+      <strong id="pendingTopups">₱0.00</strong>
+    </div>
+  </div>
 
-<div class="panel" id="topupForm">
-<h2>Top Up Wallet</h2>
-<p>Select your preferred top-up amount.</p>
+  <div class="panel" id="topupForm">
+    <h2>Top Up Wallet</h2>
+    <p>Select your preferred amount.</p>
 
-<div class="prices" id="topupAmounts">
-<div class="price" onclick="selectTopup(100)"><strong>₱100</strong><small>Top Up</small></div>
-<div class="price" onclick="selectTopup(200)"><strong>₱200</strong><small>Top Up</small></div>
-<div class="price" onclick="selectTopup(500)"><strong>₱500</strong><small>Top Up</small></div>
-</div>
+    <div class="prices" id="topupAmounts">
+      <div class="price" onclick="selectTopup(100)">
+        <strong>₱100</strong><small>Top Up</small>
+      </div>
+      <div class="price" onclick="selectTopup(200)">
+        <strong>₱200</strong><small>Top Up</small>
+      </div>
+      <div class="price" onclick="selectTopup(500)">
+        <strong>₱500</strong><small>Top Up</small>
+      </div>
+    </div>
 
-<div class="form-group">
-<label>Custom Top Up Amount (₱)</label>
-<input type="number" id="topupAmount" min="50" step="0.01" placeholder="Enter amount" oninput="updateTopupSelection()">
-</div>
+    <div class="form-group">
+      <label>Custom Top Up Amount (₱)</label>
+      <input type="number" id="topupAmount" min="50" max="100000"
+             step="0.01" placeholder="Enter amount"
+             oninput="updateTopupSelection()">
+    </div>
 
-<h3>Select Payment Method</h3>
-<div class="payment-methods">
-<label class="payment-method selected" onclick="selectPayment('GCash')">
-<input type="radio" name="paymentMethod" value="GCash" checked>
-<strong>GCash</strong>
-</label>
-<label class="payment-method" onclick="selectPayment('Maya')">
-<input type="radio" name="paymentMethod" value="Maya">
-<strong>Maya</strong>
-</label>
-<label class="payment-method" onclick="selectPayment('Bank Transfer')">
-<input type="radio" name="paymentMethod" value="Bank Transfer">
-<strong>Bank Transfer</strong>
-</label>
-</div>
+    <h3>Choose Payment Method</h3>
 
-<div class="form-group">
-<label>Payment Reference Number (Optional)</label>
-<input id="paymentReference" placeholder="Enter reference number if already paid">
-</div>
+    <div class="payment-methods">
+      <label class="payment-method selected" onclick="selectPayment('GCash')">
+        <input type="radio" name="paymentMethod" value="GCash" checked>
+        <strong>GCash</strong>
+      </label>
+      <label class="payment-method" onclick="selectPayment('Maya')">
+        <input type="radio" name="paymentMethod" value="Maya">
+        <strong>Maya</strong>
+      </label>
+      <label class="payment-method" onclick="selectPayment('Bank Transfer')">
+        <input type="radio" name="paymentMethod" value="Bank Transfer">
+        <strong>Bank Transfer</strong>
+      </label>
+    </div>
 
-<div class="notice">
-Top-up requests are submitted for manual verification. Your wallet balance will only increase after administrator approval. Do not send payment without confirming the correct payment details with support.
-</div>
+    <div class="notice">
+      <strong>Payment Instructions</strong>
+      <p>Contact Kenneth RentalShop support to confirm the official payment account before sending money.</p>
+      <a href="https://www.messenger.com/j/AbZh4JBHX2UHVOcu/?send_source=gc%3Acopy_invite_link_c"
+         target="_blank" rel="noopener">
+        Contact Support on Messenger
+      </a>
+    </div>
 
-<button class="btn" style="width:100%" onclick="requestTopup()">Submit Top Up Request</button>
-</div>
+    <div class="form-group">
+      <label>Payment Reference Number</label>
+      <input id="paymentReference" placeholder="Enter transaction reference number">
+    </div>
 
-<div class="panel">
-<h2>Top Up History</h2>
-<div class="tablewrap">
-<table>
-<thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Reference</th><th>Status</th></tr></thead>
-<tbody id="topupHistory"></tbody>
-</table>
-</div>
-</div>
+    <div class="notice">
+      Wallet credits are added only after payment has been verified and the administrator approves the request.
+    </div>
+
+    <button class="btn" style="width:100%" onclick="requestTopup()">
+      Submit Top Up Request
+    </button>
+  </div>
+
+  <div class="panel">
+    <h2>Top Up History</h2>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Reference</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="topupHistory"></tbody>
+      </table>
+    </div>
+  </div>
 </section>
-
-<section class="page" id="rentals">
-<h1>Active Rentals</h1>
-<div class="panel" id="rentalList"></div>
-</section>
-
-<section class="page" id="billing">
-<h1>Billing</h1>
-<div class="panel">
-<h2>Wallet Balance: <span id="walletAmount">₱0.00</span></h2>
-<p>Manage your wallet, top-up requests and payment history.</p>
-<button class="btn" onclick="showPage('wallet')">Open My Wallet</button>
-<p style="margin-top:25px">
-<a href="https://www.messenger.com/j/AbZh4JBHX2UHVOcu/?send_source=gc%3Acopy_invite_link_c" target="_blank" rel="noopener">Contact Support on Messenger</a>
-</p>
-</div>
-</section>
-
-<section class="page" id="history">
-<h1>Purchase History</h1>
-<div class="panel tablewrap">
-<table>
-<thead><tr><th>Product</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
-<tbody id="historyRows"></tbody>
-</table>
-</div>
-</section>
-
-<section class="page" id="admin">
-<h1>Admin Dashboard</h1>
-<div class="tabs">
-<button class="btn" onclick="adminTab('users')">Users</button>
-<button class="btn" onclick="adminTab('topups')">Top Up Requests</button>
-<button class="btn" onclick="adminTab('stocks')">Stocks</button>
-<button class="btn" onclick="adminTab('requests')">Registrations</button>
-<button class="btn" onclick="adminTab('products')">Products</button>
-</div>
-<div class="panel" id="adminContent"></div>
-</section>
-
-</main>
-
-<footer>
-<div><b>Kenneth RentalShop</b> © 2026. All rights reserved.</div>
-<div>
-<a href="https://www.messenger.com/j/AbZh4JBHX2UHVOcu/?send_source=gc%3Acopy_invite_link_c" target="_blank" rel="noopener">Support Desk</a>
-<a href="#" onclick="alert('Contact support for service terms.');return false">Terms of Service</a>
-</div>
-</footer>
-
-<div class="modal" id="productModal">
-<div class="modal-box">
-<button class="close" onclick="closeModal()">×</button>
-<div id="modalContent"></div>
-</div>
-</div>
-
-<div class="modal" id="authModal">
-<div class="modal-box" style="max-width:440px">
-<button class="close" onclick="closeAuth()">×</button>
-<h2 id="authTitle">Login</h2>
-<form onsubmit="submitAuth(event)">
-<div class="form-group"><label>Email</label><input type="email" id="authEmail" required autocomplete="email"></div>
-<div class="form-group"><label>Password</label><input type="password" id="authPassword" required minlength="6"></div>
-<div class="form-group hidden" id="nameGroup"><label>Full Name</label><input id="authName"></div>
-<button class="btn" type="submit" style="width:100%" id="authSubmit">Login</button>
-</form>
-<p style="text-align:center"><a href="#" onclick="toggleAuth();return false" id="authToggle">Create account</a></p>
-</div>
-</div>
-
-<script>
-/*
-Browser-local storefront preview.
-Real authentication, wallet accounting, payment confirmation,
-stock allocation, and admin authorization require a secure backend.
-Do not use localStorage credentials or balances for real transactions.
-*/
-
-const unlockLogo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp4PaWp7tw2k22dAhMLvWxwe6NrfWj9k1t3RsnX0KZiA&s=10";
-const tsmLogo="https://tsm-tool.com/static/imgs/TSMUK.png?v=1726190012";
-
-const initialProducts=[
-{id:"unlock",name:"UnlockTool",type:"tool",image:unlockLogo,prices:[100,150,200],supported:"https://www.unlocktool.org/supported-models",installer:"https://file.unlocktool.net/"},
-{id:"tfm",name:"TFM Tool",type:"tool",image:"",prices:[100,150,200]},
-{id:"tsm",name:"TSM Tool",type:"tool",image:tsmLogo,prices:[100,150,200],supported:"https://tsm-tool.com/support",installer:"https://tsm-tool.com/download"},
-{id:"amt",name:"AMT",type:"tool",image:"",prices:[100,150,200]},
-{id:"sigma",name:"Sigma Plus",type:"tool",image:"",prices:[100,150,200]},
-{id:"eft",name:"EFT Pro",type:"tool",image:"",prices:[100,150,200]},
-{id:"unitool",name:"UniTool",type:"server",image:"",price:350,installer:"https://mega.nz/folder/13EC2SDB#TH7nkJy9PlXSU8N3juWGzA"},
-{id:"fawu",name:"FAOU Activator",type:"server",image:"",price:300}
-];
-
-const iphones=[
-"iPhone 3G","iPhone 3GS","iPhone 4","iPhone 4s","iPhone 5","iPhone 5c","iPhone 5s",
-"iPhone 6","iPhone 6 Plus","iPhone 6s","iPhone 6s Plus","iPhone SE (1st Gen)",
-"iPhone 7","iPhone 7 Plus","iPhone 8","iPhone 8 Plus","iPhone X",
-"iPhone XS","iPhone XS Max","iPhone XR","iPhone 11","iPhone 11 Pro",
-"iPhone 11 Pro Max","iPhone SE 2020 (2nd Gen)",
-"iPhone 12","iPhone 12 mini","iPhone 12 Pro","iPhone 12 Pro Max",
-"iPhone 13","iPhone 13 mini","iPhone 13 Pro","iPhone 13 Pro Max",
-"iPhone SE (3rd Gen)","iPhone 14","iPhone 14 Plus","iPhone 14 Pro",
-"iPhone 14 Pro Max","iPhone 15","iPhone 15 Plus","iPhone 15 Pro",
-"iPhone 15 Pro Max","iPhone 16","iPhone 16 Plus","iPhone 16 Pro",
-"iPhone 16 Pro Max","iPhone 16e","iPhone 17","iPhone 17 Pro",
-"iPhone 17 Pro Max","iPhone Air","iPhone 17e","iPhone 18 Pro",
-"iPhone 18 Pro Max","iPhone Duo"
-];
-
-const ipads=[
-"iPad (1st generation)","iPad 2","iPad (3rd generation)","iPad (4th generation)",
-"iPad (5th generation)","iPad (6th generation)","iPad (7th generation)",
-"iPad (8th generation)","iPad (9th generation)","iPad (10th generation)",
-"iPad (11th generation / A16)",
-"iPad mini (1st generation)","iPad mini 2","iPad mini 3","iPad mini 4",
-"iPad mini (5th generation)","iPad mini (6th generation)",
-"iPad mini (7th generation / A17 Pro)","iPad mini (8th generation)",
-"iPad Air (1st generation)","iPad Air 2 (2nd generation)",
-"iPad Air (3rd generation)","iPad Air (4th generation)",
-"iPad Air (5th generation / M1)","iPad Air (6th generation / M2)",
-"iPad Air (7th generation / M3)","iPad Air (8th generation / M4)",
-'iPad Pro (1st generation, 9.7" / 12.9")',
-'iPad Pro (2nd generation, 10.5" / 12.9")',
-'iPad Pro (3rd generation, 11" / 12.9")',
-'iPad Pro (4th generation, 11" / 12.9")',
-'iPad Pro (5th generation, M1, 11" / 12.9")',
-'iPad Pro (6th generation, M2, 11" / 12.9")',
-'iPad Pro (7th generation, M4, OLED, 11" / 13")',
-'iPad Pro (8th generation, M5, 11" / 13")'
-];
-
-const read=(key,fallback)=>{
-try{return JSON.parse(localStorage.getItem("krs_"+key))??fallback}
-catch{return fallback}
-};
-const save=(key,value)=>localStorage.setItem("krs_"+key,JSON.stringify(value));
-
-let products=read("products",initialProducts);
-let users=read("users",[]);
-let orders=read("orders",[]);
-let stocks=read("stocks",[]);
-let topups=read("topups",[]);
-let session=read("session",null);
-let selectedProduct=null;
-let selectedVariant=0;
-let registerMode=false;
-let selectedTopupAmount=0;
-
-function money(n){return "₱"+Number(n||0).toFixed(2)}
-function safe(s){
-return String(s??"").replace(/[&<>"']/g,c=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
-}
-function currentUser(){return users.find(u=>u.id===session?.id)}
-function requireLogin(){
-if(!currentUser()){openAuth();return false}
-return true;
-}
-function isAdmin(){return currentUser()?.role==="admin"}
-function getBalance(){return currentUser()?.balance||0}
-function productById(id){return products.find(p=>p.id===id)}
-function saveAll(){
-save("users",users);
-save("orders",orders);
-save("stocks",stocks);
-save("products",products);
-save("topups",topups);
-save("session",session);
-}
-
-function renderProducts(){
-for(const type of ["tool","server"]){
-const target=document.getElementById(type==="tool"?"toolProducts":"serverProducts");
-target.innerHTML="";
-products.filter(p=>p.type===type).forEach(p=>{
-const card=document.createElement("div");
-card.className="product";
-const img=document.createElement("div");
-img.className="product-img";
-if(p.image){
-const image=document.createElement("img");
-image.src=p.image;
-image.alt=p.name;
-image.onerror=()=>{img.textContent="🔧"};
-img.appendChild(image);
-}else{
-const icon=document.createElement("span");
-icon.style.fontSize="52px";
-icon.textContent=type==="tool"?"⚙️":"📱";
-img.appendChild(icon);
-}
-const button=document.createElement("button");
-button.className="btn product-name";
-button.textContent=p.name;
-card.append(img,button);
-card.onclick=()=>openProduct(p.id);
-target.appendChild(card);
-});
-}
-}
-
-function showPage(id){
-if(id==="admin"&&!isAdmin())return;
-document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
-document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
-if(id==="wallet")renderWallet();
-if(id==="history")renderHistory();
-if(id==="rentals")renderRentals();
-if(id==="admin")adminTab("users");
-window.scrollTo(0,0);
-}
-
-function refresh(){
-const u=currentUser();
-document.getElementById("username").textContent=u?u.name:"Guest";
-document.getElementById("balance").textContent=money(u?.balance);
-document.getElementById("walletAmount").textContent=money(u?.balance);
-document.getElementById("adminNav").classList.toggle("hidden",!isAdmin());
-document.getElementById("authButton").classList.toggle("hidden",!!u);
-document.getElementById("logoutButton").classList.toggle("hidden",!u);
-document.getElementById("activeCount").textContent=orders.filter(o=>o.userId===u?.id&&o.type==="tool"&&o.expiresAt>Date.now()).length;
-renderProducts();
-renderWallet();
-}
-
-function selectTopup(amount){
-selectedTopupAmount=amount;
-document.getElementById("topupAmount").value=amount;
-updateTopupSelection();
-}
-
-function updateTopupSelection(){
-const amount=Number(document.getElementById("topupAmount").value);
-document.querySelectorAll("#topupAmounts .price").forEach(card=>{
-const value=Number(card.querySelector("strong").textContent.replace("₱",""));
-card.classList.toggle("selected",value===amount);
-});
-}
-
-function selectPayment(method){
-document.querySelectorAll(".payment-method").forEach(el=>{
-const radio=el.querySelector("input");
-radio.checked=radio.value===method;
-el.classList.toggle("selected",radio.checked);
-});
-}
-
-function requestTopup(){
-if(!requireLogin())return;
-const amount=Number(document.getElementById("topupAmount").value);
-const method=document.querySelector('input[name="paymentMethod"]:checked')?.value;
-const reference=document.getElementById("paymentReference").value.trim();
-if(!Number.isFinite(amount)||amount<50||amount>100000){
-alert("Enter a top-up amount between ₱50 and ₱100,000.");
-return;
-}
-if(!method){alert("Select a payment method.");return}
-const request={
-id:crypto.randomUUID(),
-userId:session.id,
-amount:Math.round(amount*100)/100,
-method,
-reference,
-status:"Pending",
-date:new Date().toLocaleString()
-};
-topups.push(request);
-saveAll();
-document.getElementById("topupAmount").value="";
-document.getElementById("paymentReference").value="";
-selectedTopupAmount=0;
-updateTopupSelection();
-renderWallet();
-alert("Top-up request submitted. Contact support for payment verification. Your balance will remain unchanged until approval.");
-}
-
-function renderWallet(){
-const u=currentUser();
-document.getElementById("myWalletBalance").textContent=money(u?.balance);
-const mine=topups.filter(t=>t.userId===u?.id);
-const approved=mine.filter(t=>t.status==="Approved").reduce((a,t)=>a+t.amount,0);
-const pending=mine.filter(t=>t.status==="Pending").reduce((a,t)=>a+t.amount,0);
-const purchases=orders.filter(o=>o.userId===u?.id&&o.status!=="Rejected / Refunded").reduce((a,o)=>a+o.amount,0);
-document.getElementById("totalTopups").textContent=money(approved);
-document.getElementById("pendingTopups").textContent=money(pending);
-document.getElementById("totalPurchases").textContent=money(purchases);
-document.getElementById("topupHistory").innerHTML=mine.length?
-[...mine].reverse().map(t=>`<tr>
-<td>${safe(t.date)}</td>
-<td>${money(t.amount)}</td>
-<td>${safe(t.method)}</td>
-<td>${safe(t.reference||"—")}</td>
-<td class="status">${safe(t.status)}</td>
-</tr>`).join(""):
-'<tr><td colspan="5" class="empty">No top-up requests yet.</td></tr>';
-}
-
-function closeModal(){document.getElementById("productModal").classList.remove("show")}
-function openProduct(id){
-selectedProduct=productById(id);
-selectedVariant=0;
-if(!selectedProduct)return;
-document.getElementById("productModal").classList.add("show");
-if(selectedProduct.type==="tool")renderToolModal();
-else renderServerModal();
-}
-
-function renderToolModal(){
-const p=selectedProduct;
-const hours=[6,12,24];
-const price=p.prices?.[selectedVariant]||0;
-document.getElementById("modalContent").innerHTML=`
-<div class="modal-head">
-<div style="width:130px;text-align:center">
-${p.image?`<img src="${safe(p.image)}" alt="${safe(p.name)}">`:"<div style='font-size:55px'>⚙️</div>"}
-<div><b>${safe(p.name)}</b></div>
-</div>
-<div>
-<h3>Description:</h3>
-${p.supported?`<p><a href="${safe(p.supported)}" target="_blank" rel="noopener">Here's supported devices</a></p>`:""}
-${p.installer?`<p><a href="${safe(p.installer)}" target="_blank" rel="noopener">Here's application installer</a></p>`:""}
-</div>
-</div>
-<div class="prices">
-${hours.map((h,i)=>`<div class="price ${i===selectedVariant?"selected":""}" onclick="selectVariant(${i})">
-<strong>${money(p.prices?.[i]||0)}</strong>
-<span>${h} Hours</span>
-<small>Unlimited access for ${h} hours</small>
-</div>`).join("")}
-</div>
-<div style="text-align:right">
-<p>Total amount due: <b>${money(price)}</b></p>
-<button class="btn" onclick="checkoutRental()">Proceed checkout</button>
-</div>`;
-}
-
-function selectVariant(i){selectedVariant=i;renderToolModal()}
-
-function checkoutRental(){
-if(!requireLogin())return;
-const p=selectedProduct;
-const price=Number(p.prices[selectedVariant]);
-if(getBalance()<price){
-alert("Insufficient wallet balance. Please top up.");
-return;
-}
-const stock=stocks.find(s=>s.productId===p.id&&!s.sold);
-if(!stock){alert("No available account stock. Please contact support.");return}
-if(!confirm("Purchase "+p.name+" for "+money(price)+"?"))return;
-const u=currentUser();
-u.balance-=price;
-stock.sold=true;
-const hours=[6,12,24][selectedVariant];
-orders.push({
-id:crypto.randomUUID(),
-userId:u.id,
-product:p.name,
-type:"tool",
-amount:price,
-status:"Active",
-date:new Date().toLocaleString(),
-expiresAt:Date.now()+hours*3600000,
-credentials:{email:stock.email,password:stock.password}
-});
-saveAll();
-closeModal();
-refresh();
-showPage("rentals");
-alert("Purchase successful. Your rental credentials are in Active Rentals.");
-}
-
-function renderServerModal(){
-const p=selectedProduct;
-document.getElementById("modalContent").innerHTML=`
-<h2>${safe(p.name)} Server Registration</h2>
-<p>Registration fee: <b>${money(p.price)}</b></p>
-<form onsubmit="submitRegistration(event)">
-<div class="form-group"><label>Device Model</label>
-<select id="deviceModel" required>
-<option value="">Select device</option>
-<optgroup label="iPhone">${iphones.map(x=>`<option>${safe(x)}</option>`).join("")}</optgroup>
-<optgroup label="iPad">${ipads.map(x=>`<option>${safe(x)}</option>`).join("")}</optgroup>
-</select></div>
-<div class="form-group"><label>iOS / iPadOS Version</label><input id="iosVersion" placeholder="Example: 17.6.1" required></div>
-<div class="form-group"><label>Device Status</label>
-<select id="deviceStatus" required>
-<option value="">Select status</option>
-<option>Hello Screen</option>
-<option>Passcode Lock</option>
-</select></div>
-<div class="form-group"><label>ECID</label><input id="ecid" placeholder="Enter device ECID" required></div>
-<div class="notice">Submit only devices you own or are authorized to service. Requests require manual admin approval.</div>
-<div style="text-align:right"><button class="btn" type="submit">REGISTER NOW — ${money(p.price)}</button></div>
-</form>
-${p.installer?`<p><a href="${safe(p.installer)}" target="_blank" rel="noopener">Get installer here</a></p>`:""}`;
-}
-
-function submitRegistration(e){
-e.preventDefault();
-if(!requireLogin())return;
-const p=selectedProduct,price=Number(p.price);
-if(getBalance()<price){alert("Insufficient wallet balance.");return}
-const device=document.getElementById("deviceModel").value;
-const ios=document.getElementById("iosVersion").value.trim();
-const status=document.getElementById("deviceStatus").value;
-const ecid=document.getElementById("ecid").value.trim();
-if(!device||!ios||!status||!ecid)return;
-if(!confirm("Submit registration request for "+money(price)+"?"))return;
-const u=currentUser();
-u.balance-=price;
-orders.push({
-id:crypto.randomUUID(),
-userId:u.id,
-product:p.name,
-type:"server",
-amount:price,
-status:"Processing",
-date:new Date().toLocaleString(),
-device,ios,deviceStatus:status,ecid
-});
-saveAll();
-closeModal();
-refresh();
-showPage("history");
-alert("Processing your registration. Waiting for administrator approval.");
-}
-
-function renderHistory(){
-const mine=orders.filter(o=>o.userId===session?.id).reverse();
-document.getElementById("historyRows").innerHTML=mine.length?
-mine.map(o=>`<tr><td>${safe(o.product)}</td><td>${money(o.amount)}</td><td class="status">${safe(o.status)}</td><td>${safe(o.date)}</td></tr>`).join(""):
-'<tr><td colspan="4" class="empty">No purchase history yet.</td></tr>';
-}
-
-function renderRentals(){
-const mine=orders.filter(o=>o.userId===session?.id&&o.type==="tool").reverse();
-document.getElementById("rentalList").innerHTML=mine.length?
-mine.map(o=>`<div style="border-bottom:1px solid #eee;padding:15px 0">
-<h3>${safe(o.product)}</h3>
-<p>Status: <b>${o.expiresAt>Date.now()?"Active":"Expired"}</b></p>
-<p>Expires: ${new Date(o.expiresAt).toLocaleString()}</p>
-${o.expiresAt>Date.now()?`<p>Email: <b>${safe(o.credentials?.email)}</b></p><p>Password: <b>${safe(o.credentials?.password)}</b></p>`:""}
-</div>`).join(""):"<p class='empty'>No rentals yet.</p>";
-}
-
-function openAuth(){
-registerMode=false;
-updateAuth();
-document.getElementById("authModal").classList.add("show");
-}
-function closeAuth(){document.getElementById("authModal").classList.remove("show")}
-function toggleAuth(){registerMode=!registerMode;updateAuth()}
-function updateAuth(){
-document.getElementById("authTitle").textContent=registerMode?"Create Account":"Login";
-document.getElementById("authSubmit").textContent=registerMode?"Create Account":"Login";
-document.getElementById("authToggle").textContent=registerMode?"Already have an account? Login":"Create account";
-document.getElementById("nameGroup").classList.toggle("hidden",!registerMode);
-document.getElementById("authName").required=registerMode;
-}
-function submitAuth(e){
-e.preventDefault();
-const email=document.getElementById("authEmail").value.trim().toLowerCase();
-const password=document.getElementById("authPassword").value;
-if(registerMode){
-if(users.some(u=>u.email===email)){alert("Email already registered.");return}
-const name=document.getElementById("authName").value.trim();
-const u={id:crypto.randomUUID(),name,email,password,balance:0,role:"buyer"};
-users.push(u);
-session={id:u.id};
-}else{
-const u=users.find(u=>u.email===email&&u.password===password);
-if(!u){alert("Invalid email or password.");return}
-session={id:u.id};
-}
-saveAll();
-closeAuth();
-refresh();
-showPage("tools");
-}
-function logout(){
-session=null;
-save("session",null);
-refresh();
-showPage("tools");
-}
-
-function adminTab(tab){
-if(!isAdmin())return;
-const box=document.getElementById("adminContent");
-
-if(tab==="users"){
-box.innerHTML=`<h2>Customer Accounts</h2><div class="tablewrap"><table>
-<tr><th>Name</th><th>Email</th><th>Wallet</th><th>Action</th></tr>
-${users.filter(u=>u.role==="buyer").map(u=>`<tr>
-<td>${safe(u.name)}</td>
-<td>${safe(u.email)}</td>
-<td>${money(u.balance)}</td>
-<td><button class="btn small" onclick="adjustWallet('${u.id}')">Adjust Wallet</button></td>
-</tr>`).join("")}</table></div>`;
-}
-
-else if(tab==="topups"){
-box.innerHTML=`<h2>Top Up Requests</h2>
-<div class="tablewrap"><table>
-<tr><th>Customer</th><th>Amount</th><th>Method</th><th>Reference</th><th>Status</th><th>Action</th></tr>
-${[...topups].reverse().map(t=>`
-<tr>
-<td>${safe(users.find(u=>u.id===t.userId)?.email||"Unknown")}</td>
-<td>${money(t.amount)}</td>
-<td>${safe(t.method)}</td>
-<td>${safe(t.reference||"—")}</td>
-<td>${safe(t.status)}</td>
-<td>${t.status==="Pending"?
-`<button class="btn small" onclick="approveTopup('${t.id}')">Approve</button>
-<button class="btn small danger" onclick="rejectTopup('${t.id}')">Reject</button>`:"—"}</td>
-</tr>`).join("")}
-</table></div>`;
-}
-
-else if(tab==="stocks"){
-box.innerHTML=`<h2>Add Rental Account Stock</h2>
-<form onsubmit="addStock(event)">
-<div class="form-group"><label>Software</label>
-<select id="stockProduct">
-${products.filter(p=>p.type==="tool").map(p=>`<option value="${safe(p.id)}">${safe(p.name)}</option>`).join("")}
-</select></div>
-<div class="grid2">
-<div class="form-group"><label>Rental Email / Username</label><input id="stockEmail" required></div>
-<div class="form-group"><label>Rental Password</label><input id="stockPassword" required></div>
-</div>
-<button class="btn">Post Stock</button></form>
-<p>Available accounts: ${stocks.filter(s=>!s.sold).length}</p>`;
-}
-
-else if(tab==="requests"){
-const requests=orders.filter(o=>o.type==="server").reverse();
-box.innerHTML=`<h2>Server Registration Requests</h2><div class="tablewrap"><table>
-<tr><th>Customer</th><th>Device / ECID</th><th>Status</th><th>Action</th></tr>
-${requests.map(o=>`<tr>
-<td>${safe(users.find(u=>u.id===o.userId)?.email)}</td>
-<td>${safe(o.device)}<br>${safe(o.ios)}<br>${safe(o.deviceStatus)}<br>${safe(o.ecid)}</td>
-<td>${safe(o.status)}</td>
-<td>${o.status==="Processing"?
-`<button class="btn small" onclick="approveRequest('${o.id}')">Approve</button>
-<button class="btn small danger" onclick="rejectRequest('${o.id}')">Reject & Refund</button>`:"—"}</td>
-</tr>`).join("")}</table></div>`;
-}
-
-else if(tab==="products"){
-box.innerHTML=`<h2>Post New Product</h2>
-<form onsubmit="addProduct(event)">
-<div class="form-group"><label>Product Name</label><input id="newName" required></div>
-<div class="form-group"><label>Category</label>
-<select id="newType">
-<option value="tool">Software Rental</option>
-<option value="server">Server Registration</option>
-</select></div>
-<div class="form-group"><label>Logo URL</label><input id="newImage" placeholder="https://..."></div>
-<div class="form-group"><label>Price (₱)</label><input id="newPrice" type="number" min="1" required></div>
-<button class="btn">Publish Product</button>
-</form>`;
-}
-}
-
-function approveTopup(id){
-if(!isAdmin())return;
-const t=topups.find(x=>x.id===id&&x.status==="Pending");
-if(!t)return;
-const u=users.find(x=>x.id===t.userId);
-if(!u)return;
-if(!confirm("Approve "+money(t.amount)+" for "+u.email+"? Only approve after independently verifying payment."))return;
-u.balance=Math.round((u.balance+t.amount)*100)/100;
-t.status="Approved";
-saveAll();refresh();adminTab("topups");
-}
-
-function rejectTopup(id){
-if(!isAdmin())return;
-const t=topups.find(x=>x.id===id&&x.status==="Pending");
-if(!t)return;
-if(!confirm("Reject this top-up request?"))return;
-t.status="Rejected";
-saveAll();adminTab("topups");
-}
-
-function adjustWallet(id){
-if(!isAdmin())return;
-const u=users.find(u=>u.id===id);
-if(!u)return;
-const amount=prompt("Set wallet balance for "+u.email+" (₱)",u.balance);
-if(amount===null)return;
-const n=Number(amount);
-if(!Number.isFinite(n)||n<0){alert("Invalid balance.");return}
-u.balance=Math.round(n*100)/100;
-saveAll();refresh();adminTab("users");
-}
-
-function addStock(e){
-e.preventDefault();
-if(!isAdmin())return;
-stocks.push({
-id:crypto.randomUUID(),
-productId:document.getElementById("stockProduct").value,
-email:document.getElementById("stockEmail").value,
-password:document.getElementById("stockPassword").value,
-sold:false
-});
-saveAll();adminTab("stocks");alert("Stock added.");
-}
-
-function approveRequest(id){
-if(!isAdmin())return;
-const o=orders.find(o=>o.id===id&&o.status==="Processing");
-if(!o)return;
-if(!confirm("Confirm server registration is complete?"))return;
-o.status="Registered";
-saveAll();adminTab("requests");
-}
-
-function rejectRequest(id){
-if(!isAdmin())return;
-const o=orders.find(o=>o.id===id&&o.status==="Processing");
-if(!o)return;
-if(!confirm("Reject and refund this request?"))return;
-const u=users.find(u=>u.id===o.userId);
-if(u)u.balance+=o.amount;
-o.status="Rejected / Refunded";
-saveAll();adminTab("requests");
-}
-
-function addProduct(e){
-e.preventDefault();
-if(!isAdmin())return;
-const name=document.getElementById("newName").value.trim();
-const type=document.getElementById("newType").value;
-const image=document.getElementById("newImage").value.trim();
-const price=Number(document.getElementById("newPrice").value);
-if(!name||price<=0||!Number.isFinite(price))return;
-if(image&&!/^https:\/\//i.test(image)){
-alert("Use an HTTPS image URL.");return;
-}
-products.push({
-id:crypto.randomUUID(),
-name,type,image,price,
-prices:[price,price*1.5,price*2]
-});
-saveAll();refresh();adminTab("products");alert("Product published.");
-}
-
-refresh();
-</script>
-</body>
-</html>
