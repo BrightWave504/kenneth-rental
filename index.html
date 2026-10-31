@@ -1,17 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-  <title>Kenneth RentalShop</title>
-
-  <style>
-    /* Website CSS styling goes here */
-  </style>
-</head>
-<body>
-  <!-- Website content goes here -->
-</body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kenneth RentalShop</title>
+<style>
+:root{font-family:Inter,Arial,sans-serif;color:#17253e;background:#f7f9fd}*{box-sizing:border-box}body{margin:0}header{background:white;border-bottom:1px solid #e4e9f2;padding:18px max(20px,calc((100vw - 1180px)/2));display:flex;align-items:center;gap:18px;flex-wrap:wrap}.brand{font-weight:800;font-size:21px;margin-right:auto}.brand span{color:#2563eb}nav{display:flex;gap:5px;flex-wrap:wrap}button{font:inherit;cursor:pointer;border:0;border-radius:9px;padding:11px 15px;background:#edf2fa;color:#24436f}button:hover{filter:brightness(.97)}button.active,.primary{background:linear-gradient(#478bff,#1553c7);color:white;box-shadow:inset 0 2px #9ac4ff}button:disabled{opacity:.5;cursor:not-allowed}.userbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.balance{background:#edf4ff;border-radius:20px;padding:10px 15px;cursor:pointer}main{max-width:1120px;margin:40px auto;padding:0 18px;min-height:67vh}.page{display:none}.page.active{display:block}h1{font-size:26px}h2{font-size:20px}.panel{background:white;border:1px solid #e8edf4;border-radius:18px;padding:26px;margin:18px 0;box-shadow:0 10px 30px #193e7210}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}.product{text-align:center}.art{height:170px;background:white;border-radius:20px;display:grid;place-items:center;box-shadow:0 12px 22px #0002;margin-bottom:20px}.art img{max-height:125px;max-width:80%;object-fit:contain}.product button{min-width:155px}.muted{color:#66768c}.wallet{background:linear-gradient(125deg,#347afa,#173eaa);color:white;padding:28px;border-radius:20px}.wallet strong{font-size:40px;display:block;margin:12px 0 25px}.wallet button{background:white;color:#1c4ec1}label{display:block;font-weight:600;font-size:14px;margin:18px 0 7px}input,select{padding:12px;width:100%;border:1px solid #cbd5e1;border-radius:9px;font:inherit}.auth{max-width:450px;margin:0 auto}.notice{padding:15px;background:#eef4ff;border-radius:12px;color:#36537a;margin:20px 0}.error{color:#c42a2a}.success{color:#128346}table{border-collapse:collapse;width:100%}td,th{padding:13px;border-bottom:1px solid #e8edf4;text-align:left}footer{background:white;padding:25px;text-align:center;color:#66768c;border-top:1px solid #e4e9f2}.hidden{display:none!important}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.pill{padding:5px 10px;background:#e9f4eb;color:#14793a;border-radius:20px;font-size:12px}@media(max-width:650px){header{padding:16px}main{margin:22px auto}.brand{width:100%}nav button{font-size:13px;padding:9px}}
+.modal{position:fixed;inset:0;background:#101b35a8;display:none;align-items:center;justify-content:center;padding:16px;z-index:99}.modal.open{display:flex}.dialog{background:white;border-radius:20px;padding:28px;max-width:520px;width:100%;max-height:90vh;overflow:auto}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.choice{border:2px solid #dce5f4;background:white;text-align:center;padding:15px 6px}.choice.selected{border-color:#2563eb;background:#eff6ff}.full{width:100%}.credential{background:#eef4ff;border-radius:8px;padding:12px;overflow-wrap:anywhere}.stockform{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.stockform input,.stockform select{min-width:0}@media(max-width:650px){.stockform{grid-template-columns:1fr}} </style></head><body>
+<header><div class="brand">🔹 Kenneth <span>RentalShop</span></div><nav>
+<button data-page="tools" class="active">Tools</button><button data-page="servers">Servers</button><button data-page="wallet">My Wallet</button><button data-page="rentals">Active Rentals</button><button data-page="billing">Billing</button><button data-page="history">History</button><button data-page="admin" class="hidden" id="adminNav">Admin</button>
+</nav><div class="userbar"><div class="balance" id="balanceLink">💳 <b id="headerBalance">₱0.00</b></div><span id="who">Guest</span><button id="authBtn" class="primary">Login</button><button id="logoutBtn" class="hidden">Logout</button></div></header>
+<main>
+<section id="tools" class="page active"><h1>Software Account Rental</h1><div class="grid" id="toolGrid"></div></section>
+<section id="servers" class="page"><h1>Server Registration</h1><div class="grid" id="serverGrid"></div></section>
+<section id="wallet" class="page"><h1>My Wallet</h1><div class="wallet"><div>Available Balance</div><strong id="walletBalance">₱0.00</strong><button id="topupButton">Top Up Wallet</button></div><div class="panel"><h2>Payment methods</h2><p>GCash · Maya · Debit / Credit Card</p><div class="notice">Automatic top-ups are not enabled yet. A payment gateway and verified server-side webhook must be connected before payments can be accepted and wallet balances credited. No payment is collected here.</div></div><div class="panel"><h2>Wallet activity</h2><p class="muted">Transaction history will appear here after the secure payment and order system is connected.</p></div></section>
+<section id="rentals" class="page"><h1>Active Rentals</h1><div id="rentalsList" class="panel">Loading...</div></section>
+<section id="billing" class="page"><h1>Billing</h1><div class="panel"><h2>Current wallet balance: <span id="billingBalance">₱0.00</span></h2><button data-page="wallet" class="primary">View My Wallet</button></div></section>
+<section id="history" class="page"><h1>Purchase History</h1><div id="historyList" class="panel">Loading...</div></section>
+<section id="admin" class="page"><h1>Administrator Dashboard <span class="pill">Admin only</span></h1><div class="panel"><div class="row"><h2>Registered accounts</h2><button id="reloadUsers">Refresh</button></div><div style="overflow:auto"><table><thead><tr><th>User</th><th>Wallet balance</th><th>Created</th></tr></thead><tbody id="usersBody"></tbody></table></div><p class="muted">Only stock accounts that you are authorized to rent. Each account is allocated to one purchase.</p></div><div class="panel"><h2>Add rental account stock</h2><form id="stockForm" class="stockform"><select id="stockProduct" required></select><input id="stockLogin" placeholder="Tool account username" required><input id="stockPass" type="password" placeholder="Tool account password" required><button class="primary" type="submit">Add stock</button></form><p id="stockMsg" role="status"></p><h3>Available stock</h3><div id="stockSummary"></div></div></section>
+<section id="login" class="page"><div class="panel auth"><h1>Login</h1><form id="loginForm"><label for="email">Email</label><input id="email" type="email" autocomplete="username" required><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required><p><button class="primary" id="loginSubmit" type="submit">Login to Account</button></p></form><p id="loginMessage" role="status"></p><p class="muted">Use your existing Supabase admin or buyer account.</p></div></section>
+</main><div class="modal" id="checkoutModal"><div class="dialog"><div class="row"><h2 id="checkoutTitle">Rent tool</h2><button id="closeCheckout" type="button">✕</button></div><p>Select rental duration:</p><div class="choices" id="durationChoices"></div><p>Amount due: <strong id="checkoutTotal">₱0.00</strong></p><p class="muted" id="stockAvailability"></p><p id="checkoutMessage" role="status"></p><button id="confirmCheckout" class="primary full">Pay with Wallet</button></div></div><footer>Kenneth RentalShop © 2026 · <a href="https://www.messenger.com/j/AbZh4JBHX2UHVOcu/?send_source=gc%3Acopy_invite_link_c" target="_blank" rel="noopener noreferrer">Contact support</a></footer>
+<script type="module">
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const SUPABASE_URL='https://qrhtqaltroccnrpqicrn.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_o5cRbS4TtxFjXN3K03HQ4w_E9XEGjKe';
+const supabase=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let user=null,role='buyer',balance=0;
+const $=id=>document.getElementById(id);
+const money=n=>'₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const products=[{name:'UnlockTool',type:'tool',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp4PaWp7tw2k22dAhMLvWxwe6NrfWj9k1t3RsnX0KZiA&s=10',price:'₱100 / 6 hours'},{name:'TSM Tool',type:'tool',img:'https://tsm-tool.com/static/imgs/TSMUK.png?v=1726190012',price:'₱100 / 6 hours'},{name:'TFM Tool',type:'tool',price:'Contact support'},{name:'AMT',type:'tool',price:'Contact support'},{name:'Sigma Plus',type:'tool',price:'Contact support'},{name:'EFT Pro',type:'tool',price:'Contact support'},{name:'UniTool',type:'server',price:'₱350'},{name:'FAOU Activator',type:'server',price:'Contact support'}];
+let catalog=[],prices=[],chosenProduct=null,chosenHours=6;
+async function loadCatalog(){
+ const [a,b]=await Promise.all([supabase.from('rental_products').select('id,name,image_url,enabled').eq('enabled',true),supabase.from('rental_prices').select('product_id,hours,price')]);
+ if(a.error||b.error){console.error(a.error||b.error);return}
+ catalog=a.data||[];prices=b.data||[];renderProducts();
+}
+function renderProducts(){
+ for(const type of ['tool','server']){
+  const parent=$(type==='tool'?'toolGrid':'serverGrid');parent.replaceChildren();
+  const items=type==='tool'?catalog:products.filter(p=>p.type==='server');
+  for(const p of items){const card=document.createElement('div');card.className='product';const art=document.createElement('div');art.className='art';
+   const image=p.image_url||p.img;if(image){const img=document.createElement('img');img.src=image;img.alt=p.name;art.append(img)}else{art.textContent=type==='tool'?'⚙️':'📱';art.style.fontSize='50px'}
+   const btn=document.createElement('button');btn.className='primary';btn.textContent=p.name;
+   btn.onclick=()=>type==='tool'?openCheckout(p):alert('Server registration checkout is not enabled yet. Contact support.');card.append(art,btn);parent.append(card);
+  }
+ }
+}
+function openCheckout(p){if(!user){showPage('login');return}chosenProduct=p;chosenHours=6;$('checkoutTitle').textContent=p.name+' Rental';$('checkoutMessage').textContent='';$('checkoutModal').classList.add('open');renderChoices();}
+function renderChoices(){const wrap=$('durationChoices');wrap.replaceChildren();for(const hours of [6,12,24]){const price=prices.find(x=>x.product_id===chosenProduct.id&&x.hours===hours);if(!price)continue;const btn=document.createElement('button');btn.className='choice'+(chosenHours===hours?' selected':'');btn.textContent=hours+' hours · '+money(price.price);btn.onclick=()=>{chosenHours=hours;renderChoices()};wrap.append(btn)}const price=prices.find(x=>x.product_id===chosenProduct.id&&x.hours===chosenHours);$('checkoutTotal').textContent=money(price?.price);$('stockAvailability').textContent='Wallet checkout requires available account stock. Your balance is '+money(balance)+'.';}
+$('closeCheckout').onclick=()=>$('checkoutModal').classList.remove('open');
+$('checkoutModal').onclick=e=>{if(e.target===$('checkoutModal'))$('checkoutModal').classList.remove('open')};
+$('confirmCheckout').onclick=async()=>{
+ if(!user||!chosenProduct)return;const price=prices.find(x=>x.product_id===chosenProduct.id&&x.hours===chosenHours);if(!price)return;
+ if(balance<Number(price.price)){$('checkoutMessage').textContent='Insufficient wallet balance. Please top up when payment processing becomes available.';return}
+ if(!confirm('Purchase '+chosenProduct.name+' for '+money(price.price)+'?'))return;
+ const btn=$('confirmCheckout');btn.disabled=true;$('checkoutMessage').textContent='Processing securely...';
+ const {data,error}=await supabase.rpc('purchase_rental',{p_product_id:chosenProduct.id,p_hours:chosenHours});btn.disabled=false;
+ if(error){$('checkoutMessage').textContent=error.message;return}
+ $('checkoutModal').classList.remove('open');await refreshAccount();showPage('rentals');
+};
+async function loadOrders(page){const id=page==='rentals'?'rentalsList':'historyList';const el=$(id);if(!user){el.textContent='Log in to view your purchases.';return}
+ const {data,error}=await supabase.from('rental_orders').select('product_name,price,duration_hours,login_name,login_password,purchased_at,expires_at').order('purchased_at',{ascending:false});
+ if(error){el.textContent=error.message;return}el.replaceChildren();const orders=(data||[]).filter(o=>page==='history'||new Date(o.expires_at)>new Date());
+ if(!orders.length){el.textContent=page==='rentals'?'No active rentals.':'No purchase history yet.';return}
+ for(const o of orders){const div=document.createElement('div');div.style.cssText='padding:15px 0;border-bottom:1px solid #e5eaf2';const title=document.createElement('h3');title.textContent=o.product_name+' · '+o.duration_hours+' hours';div.append(title);
+ const info=document.createElement('p');info.textContent=money(o.price)+' · Purchased '+new Date(o.purchased_at).toLocaleString()+' · Expires '+new Date(o.expires_at).toLocaleString();div.append(info);
+ if(new Date(o.expires_at)>new Date()){for(const [label,value] of [['Username',o.login_name],['Password',o.login_password]]){const p=document.createElement('p');p.className='credential';p.textContent=label+': '+value;div.append(p)}}else{const expired=document.createElement('p');expired.textContent='Expired — credentials hidden';div.append(expired)}el.append(div)}
+}
+async function loadStock(){if(role!=='admin')return;const {data,error}=await supabase.from('rental_stock').select('product_id,allocated_at');const el=$('stockSummary');if(error){el.textContent=error.message;return}el.replaceChildren();for(const p of catalog){const n=(data||[]).filter(x=>x.product_id===p.id&&!x.allocated_at).length;const line=document.createElement('p');line.textContent=p.name+': '+n+' available';el.append(line)}}
+$('stockForm').addEventListener('submit',async e=>{e.preventDefault();if(role!=='admin')return;const btn=e.submitter;btn.disabled=true;const {error}=await supabase.from('rental_stock').insert({product_id:$('stockProduct').value,login_name:$('stockLogin').value.trim(),login_password:$('stockPass').value});btn.disabled=false;$('stockMsg').textContent=error?error.message:'Account stock added.';if(!error){$('stockLogin').value='';$('stockPass').value='';loadStock()}});
+function showPage(page){if(page==='admin'&&(!user||role!=='admin'))page='tools';document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));document.querySelectorAll('[data-page]').forEach(el=>el.classList.toggle('active',el.dataset.page===page));if(page==='admin'){loadAdminUsers();loadStock()}if(page==='rentals'||page==='history')loadOrders(page);window.scrollTo(0,0)}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+$('balanceLink').onclick=()=>showPage(user?'wallet':'login');$('authBtn').onclick=()=>showPage('login');$('topupButton').onclick=()=>alert('Payment processing is not enabled yet. Do not send money until the payment gateway is connected.');
+$('logoutBtn').onclick=async()=>{await supabase.auth.signOut();user=null;role='buyer';balance=0;updateUI();showPage('tools')};
+function updateUI(){const logged=!!user;$('who').textContent=logged?(user.email||'Account'):'Guest';$('authBtn').classList.toggle('hidden',logged);$('logoutBtn').classList.toggle('hidden',!logged);$('adminNav').classList.toggle('hidden',!logged||role!=='admin');for(const id of ['headerBalance','walletBalance','billingBalance'])$(id).textContent=money(balance)}
+async function refreshAccount(){const {data:{user:current},error}=await supabase.auth.getUser();user=error?null:current;role=user?.app_metadata?.role==='admin'?'admin':'buyer';balance=0;if(user){const {data,error:profileError}=await supabase.from('profiles').select('wallet_balance').eq('user_id',user.id).single();if(profileError){console.error('Profile error:',profileError.message)}else balance=Number(data.wallet_balance)}updateUI()}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('loginSubmit');const msg=$('loginMessage');btn.disabled=true;msg.textContent='Signing in…';msg.className='muted';const {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});btn.disabled=false;if(error){msg.textContent=error.message;msg.className='error';return} $('password').value='';await refreshAccount();msg.textContent='';showPage(role==='admin'?'admin':'wallet')});
+async function loadAdminUsers(){if(!user||role!=='admin')return;const tbody=$('usersBody');tbody.replaceChildren();const {data,error}=await supabase.from('profiles').select('display_name,wallet_balance,created_at').order('created_at',{ascending:false});if(error){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=3;td.textContent='Unable to load profiles: '+error.message;tr.append(td);tbody.append(tr);return}for(const p of data||[]){const tr=document.createElement('tr');for(const value of [p.display_name||'User',money(p.wallet_balance),new Date(p.created_at).toLocaleDateString()]){const td=document.createElement('td');td.textContent=value;tr.append(td)}tbody.append(tr)}}
+$('reloadUsers').onclick=loadAdminUsers;
+supabase.auth.onAuthStateChange((_event,_session)=>{ /* session updates are refreshed explicitly below */ });
+await loadCatalog();for(const p of catalog){const option=document.createElement('option');option.value=p.id;option.textContent=p.name;$('stockProduct').append(option)}await refreshAccount();showPage(user?(role==='admin'?'admin':'tools'):'tools');
+</script></body></html>
