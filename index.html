@@ -13,7 +13,7 @@
 <section class="page" id="notifications"><h1>Notifications</h1><div class="panel" id="notificationList"></div></section>
 <section class="page" id="admin"><h1>Admin Dashboard</h1><div class="tabs"><button data-tab="accounts" class="active">Account Management</button><button data-tab="products">Product Management</button><button data-tab="registrations">Server Registration Management</button><button data-tab="approvals">Top-Up Approvals</button><button data-tab="purchases">Purchase History</button><button data-tab="alerts">Notifications</button></div>
 <div class="tabpage active" id="tab-accounts"><div class="panel"><h2>Customer Accounts</h2><p class="muted">Automatically sorted by wallet balance, highest to lowest. Passwords are never displayed. Use a secure email reset link to help a customer change their password.</p><div class="tablewrap"><table><thead><tr><th>Account</th><th>Wallet</th><th>Action</th></tr></thead><tbody id="accountsRows"></tbody></table></div></div></div>
-<div class="tabpage" id="tab-products"><div class="panel"><div class="row"><h2>Products and Variants</h2><button class="primary" id="addSoftwareProduct" type="button">+ Add Software Product</button></div><p class="muted">Existing software products appear below with a red Delete Product button. Deleting hides the product from buyers while preserving purchase history.</p><div id="adminProducts"></div></div><div class="panel"><h2>Post Software Product</h2><form id="productForm"><label>Product name</label><input id="productName" required><label>Product logo (PNG, JPEG, WebP; max 2 MB)</label><input id="productLogo" type="file" accept="image/png,image/jpeg,image/webp"><div class="split"><div><label>6-hour variant price (₱)</label><input id="price6" type="number" min="1" step="0.01" required></div><div><label>12-hour variant price (₱)</label><input id="price12" type="number" min="1" step="0.01" required></div></div><label>24-hour variant price (₱)</label><input id="price24" type="number" min="1" step="0.01" required><p><button class="primary" type="submit">Publish Product</button></p><p id="productMessage" role="status"></p></form></div><div class="panel"><h2>Restock Rental Account</h2><form id="stockForm"><label>Software</label><select id="stockProduct" required></select><label>Rental Variant</label><select id="stockHours" required><option value="6">6 Hours</option><option value="12">12 Hours</option><option value="24">24 Hours</option></select><label>Account username</label><input id="stockLogin" required><label>Account password</label><input id="stockPass" type="password" required><p><button class="primary">Add Stock</button></p><p id="stockMessage" role="status"></p></form><div id="stockCounts"></div></div></div>
+<div class="tabpage" id="tab-products"><div class="panel"><div class="row"><h2>Products and Variants</h2><button class="primary" id="addSoftwareProduct" type="button">+ Add Software Product</button></div><p class="muted">Existing software products appear below with a red Delete Product button. Deleting hides the product from buyers while preserving purchase history.</p><div id="adminProducts"></div></div><div class="panel"><h2>Post Software Product</h2><form id="productForm"><label>Product name</label><input id="productName" required><label>Product logo (PNG, JPEG, WebP; max 2 MB)</label><input id="productLogo" type="file" accept="image/png,image/jpeg,image/webp"><div class="split"><div><label>6-hour variant price (₱)</label><input id="price6" type="number" min="1" step="0.01" required></div><div><label>12-hour variant price (₱)</label><input id="price12" type="number" min="1" step="0.01" required></div></div><label>24-hour variant price (₱)</label><input id="price24" type="number" min="1" step="0.01" required><p><button class="primary" type="submit">Publish Product</button></p><p id="productMessage" role="status"></p></form></div><div class="panel"><h2>Restock Rental Account</h2><form id="stockForm"><label>Software</label><select id="stockProduct" required></select><label>Rental Variant</label><select id="stockHours" required></select><label>Account username</label><input id="stockLogin" required><label>Account password</label><input id="stockPass" type="password" required><p><button type="submit" class="primary">Add Stock to Selected Variant</button></p><p id="stockMessage" role="status"></p></form><div id="stockCounts"></div></div></div>
 <div class="tabpage" id="tab-registrations"><div class="panel"><h2>Existing Server Products</h2><p class="muted">Manage your current server products. Delete hides a product from customers; Restore makes it available again.</p><div id="adminServerProducts"></div></div><div class="panel"><h2>Server Product Management</h2><form id="serverProductForm"><div class="split"><div><label>Server Product Name</label><input id="serverProductName" required placeholder="e.g. UniTool"></div><div><label>Registration Price (₱)</label><input id="serverProductPrice" type="number" min="1" step="0.01" required></div></div><label>Product Logo (optional, max 2 MB)</label><input id="serverProductLogo" type="file" accept="image/png,image/jpeg,image/webp"><p><button type="submit" class="primary">+ Add Server Product</button></p><p id="serverProductMessage" role="status"></p></form></div><div class="panel"><h2>Server Registration Requests</h2><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Device / ECID</th><th>Amount</th><th>Status</th><th>Review</th></tr></thead><tbody id="registrationRows"></tbody></table></div></div></div>
 <div class="tabpage" id="tab-approvals"><div class="panel"><h2>Manual Payment Verification</h2><p class="notice">Independently confirm the payment was actually received in your payment account. Match amount, reference and timestamp before approving. A submitted reference number alone is not proof of payment.</p><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Amount</th><th>Reference</th><th>Payment time</th><th>Status</th><th>Review</th></tr></thead><tbody id="approvalRows"></tbody></table></div></div></div>
 <div class="tabpage" id="tab-purchases"><div class="panel"><h2>All Purchases & Server Registrations</h2><div id="adminPurchaseSummary" class="notice"></div><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Type</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="adminPurchaseRows"></tbody></table></div></div></div>
@@ -41,13 +41,13 @@ $('loginForm').onsubmit=async e=>{e.preventDefault();$('loginSubmit').disabled=t
 $('logoutBtn').onclick=async()=>{await supabase.auth.signOut();await refreshAccount();showPage('tools')};
 async function loadCatalog(){const [a,b,c,d]=await Promise.all([supabase.from('rental_products').select('*').eq('enabled',true).order('name'),supabase.from('rental_prices').select('*'),supabase.from('server_products').select('*').eq('enabled',true),supabase.rpc('rental_variant_availability')]);if(a.error||b.error||c.error||d.error){console.error(a.error||b.error||c.error||d.error);alert('Unable to load product availability: '+(a.error||b.error||c.error||d.error).message)}catalog=a.data||[];prices=b.data||[];servers=c.data||[];availability=d.data||[];renderCatalog()}
 function renderCatalog(){for(const [kind,items,target] of [['tool',catalog,$('toolGrid')],['server',servers,$('serverGrid')]]){target.replaceChildren();for(const p of items){const noStock=kind==='tool'&&productStock(p.id)===0;const card=node('div',undefined,'product'+(noStock?' unavailable':'')),art=node('div',undefined,'art');if(p.image_url){const img=node('img');img.src=p.image_url;img.alt=p.name;img.onerror=()=>art.replaceChildren(node('span','⚙️'));art.append(img)}else{art.append(node('span',kind==='tool'?'⚙️':'📱'));art.style.fontSize='45px'}const action=btn(noStock?p.name+' — No Stock':p.name,()=>kind==='tool'?openRental(p):openServer(p),'primary');action.disabled=noStock;card.append(art,action);if(kind==='tool'&&!noStock)card.append(node('small',productStock(p.id)+' account(s) available','muted'));if(noStock)card.append(node('span','NO STOCK','out-of-stock'));target.append(card)}}}
-function openRental(p){if(productStock(p.id)===0)return;selectedProduct=p;selectedHours=[6,12,24].find(h=>available(p.id,h)>0&&prices.some(x=>x.product_id===p.id&&x.hours===h))||6;renderRentalDialog()}
+function openRental(p){if(productStock(p.id)===0)return;selectedProduct=p;selectedHours=prices.filter(x=>x.product_id===p.id&&available(p.id,x.hours)>0).sort((a,b)=>a.hours-b.hours)[0]?.hours||0;renderRentalDialog()}
 function renderRentalDialog(){
  $('modalTitle').textContent=selectedProduct.name+' Rental';
  const wrap=$('modalBody');wrap.replaceChildren(node('p','Select rental duration:'));
  const choices=node('div',undefined,'choices');
- for(const h of [6,12,24]){
-  const pr=prices.find(x=>x.product_id===selectedProduct.id&&x.hours===h);
+ for(const pr of prices.filter(x=>x.product_id===selectedProduct.id).sort((a,b)=>a.hours-b.hours)){
+  const h=pr.hours;
   if(!pr)continue;
   const count=available(selectedProduct.id,h);
   const button=btn(h+' Hours — '+money(pr.price)+(count?' ('+count+' available)':' — NO STOCK'),()=>{selectedHours=h;renderRentalDialog()},selectedHours===h?'selected':'');
@@ -93,34 +93,63 @@ async function loadProductAdmin(){
  for(const p of data||[]){
   const {line,actions}=managedProductRow(p,'rental_products');
   const details=node('div');details.style.minWidth='280px';
-  for(const h of [6,12,24]){
-   const pr=prices.find(x=>x.product_id===p.id&&Number(x.hours)===h);
-   if(!pr)continue;
+  const variantPrices=prices.filter(x=>x.product_id===p.id).sort((a,b)=>a.hours-b.hours);
+  for(const pr of variantPrices){
+   const h=pr.hours;
    const variant=node('div',undefined,'variant-restock');
    const variantRow=node('div',undefined,'row');
    variantRow.append(node('b',h+' Hours — '+money(pr.price)),node('span',available(p.id,h)+' available'+(available(p.id,h)===0?' · NO STOCK':''),available(p.id,h)===0?'out-of-stock':'muted'));
    const restock=btn('+ Restock '+h+'h',()=>{
-    $('stockProduct').value=p.id;$('stockHours').value=String(h);
+    $('stockProduct').value=p.id;updateStockHourOptions();$('stockHours').value=String(h);
     $('stockForm').scrollIntoView({behavior:'smooth',block:'center'});
     $('stockLogin').focus();
    },'small primary');
-   const edit=btn('Edit Price',async()=>{
-    const val=prompt('New '+h+'-hour price (₱)',pr.price);if(val===null)return;
-    const price=Number(val);if(!Number.isFinite(price)||price<=0)return alert('Invalid price');
-    const {error}=await supabase.from('rental_prices').upsert({product_id:p.id,hours:h,price},{onConflict:'product_id,hours'});
-    if(error)alert(error.message);else{await loadCatalog();await loadProductAdmin()}
+   const edit=btn('Edit Hours / Price',async()=>{
+    const duration=prompt('Duration in hours (1–720)',String(h));if(duration===null)return;
+    const newHours=Number(duration);
+    const amount=prompt('Variant price (₱)',String(pr.price));if(amount===null)return;
+    await manageVariant(p.id,'edit',h,newHours,Number(amount));
    },'small');
-   const controls=node('div',undefined,'row');controls.append(restock,edit);
+   const remove=btn('Delete Variant',async()=>{
+    if(!confirm('Delete '+h+'-hour variant from '+p.name+'? Unsold stock will be retained but unavailable until a matching variant is added again.'))return;
+    await manageVariant(p.id,'delete',h,h,pr.price);
+   },'small danger');
+   const controls=node('div',undefined,'row');controls.append(restock,edit,remove);
    variant.append(variantRow,controls);details.append(variant);
   }
+  const addVariant=btn('+ Add Variant',async()=>{
+   const duration=prompt('New duration in hours (1–720)');if(duration===null)return;
+   const amount=prompt('Price for this variant (₱)');if(amount===null)return;
+   await manageVariant(p.id,'add',null,Number(duration),Number(amount));
+  },'small primary');
+  details.append(addVariant);
   line.append(details);wrap.append(line);
  }
  $('stockProduct').replaceChildren();
  for(const p of catalog){const op=node('option',p.name);op.value=p.id;$('stockProduct').append(op)}
+ updateStockHourOptions();
  const counts=$('stockCounts');counts.replaceChildren();
- for(const p of catalog){const panel=node('p',p.name+': '+[6,12,24].map(h=>h+'h: '+available(p.id,h)).join(' · '));counts.append(panel)}
+ for(const p of catalog){const panel=node('p',p.name+': '+prices.filter(x=>x.product_id===p.id).sort((a,b)=>a.hours-b.hours).map(x=>x.hours+'h: '+available(p.id,x.hours)).join(' · '));counts.append(panel)}
 }
 async function loadServerProductAdmin(){if(!isAdmin())return;const wrap=$('adminServerProducts');wrap.replaceChildren();const {data,error}=await supabase.from('server_products').select('*').order('name');if(error){empty(wrap,error.message);return}if(!data?.length)empty(wrap,'No server products found.');for(const p of data||[]){const {line,actions}=managedProductRow(p,'server_products');line.append(node('p',money(p.price)));actions.prepend(btn('Edit Price',async()=>{const value=prompt('New price for '+p.name,p.price);if(value===null)return;const price=Number(value);if(!Number.isFinite(price)||price<=0)return alert('Invalid price');const {error}=await supabase.from('server_products').update({price}).eq('id',p.id);if(error)alert(error.message);else{await loadCatalog();await loadServerProductAdmin()}},'small'));wrap.append(line)}}
+async function manageVariant(productId,action,oldHours,newHours,price){
+ if(!isAdmin())return;
+ if(action!=='delete'&&(!Number.isInteger(newHours)||newHours<1||newHours>720||!Number.isFinite(price)||price<=0))return alert('Enter a valid duration (1–720 hours) and positive price.');
+ const {error}=await supabase.rpc('manage_rental_variant',{p_product_id:productId,p_action:action,p_old_hours:oldHours,p_new_hours:newHours,p_price:price});
+ if(error)return alert(error.message);
+ await loadCatalog();await loadProductAdmin();
+ alert(action==='add'?'Variant added.':action==='edit'?'Variant updated. Unsold stock was moved to the new duration.':'Variant removed from sale.');
+}
+function updateStockHourOptions(){
+ const productId=$('stockProduct').value,previous=$('stockHours').value;
+ const select=$('stockHours');select.replaceChildren();
+ for(const pr of prices.filter(x=>x.product_id===productId).sort((a,b)=>a.hours-b.hours)){
+  const option=node('option',pr.hours+' Hours — '+money(pr.price));option.value=String(pr.hours);select.append(option);
+ }
+ if([...select.options].some(x=>x.value===previous))select.value=previous;
+ $('stockForm').querySelector('button[type="submit"]')?.toggleAttribute('disabled',select.options.length===0);
+}
+$('stockProduct').addEventListener('change',updateStockHourOptions);
 $('addSoftwareProduct').onclick=()=>{$('productForm').scrollIntoView({behavior:'smooth',block:'center'});$('productName').focus()};
 async function uploadServerLogo(file,id){if(!file)return null;if(file.size>2097152||!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('Use PNG, JPEG or WebP under 2 MB.');const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';const path='server-'+id+'-'+crypto.randomUUID()+'.'+ext;const {error}=await supabase.storage.from('product-logos').upload(path,file,{contentType:file.type});if(error)throw error;return supabase.storage.from('product-logos').getPublicUrl(path).data.publicUrl}
 $('serverProductForm').onsubmit=async e=>{e.preventDefault();if(!isAdmin())return;const name=$('serverProductName').value.trim(),price=Number($('serverProductPrice').value),msg=$('serverProductMessage');if(!name||!Number.isFinite(price)||price<=0){msg.textContent='Enter a valid name and price.';return}const id='server-'+crypto.randomUUID();const submit=e.submitter;if(submit)submit.disabled=true;try{const image_url=await uploadServerLogo($('serverProductLogo').files[0],id);const {error}=await supabase.from('server_products').insert({id,name,price,image_url,enabled:true});if(error)throw error;msg.textContent='Server product added successfully.';$('serverProductForm').reset();await loadCatalog();await loadServerProductAdmin()}catch(err){msg.textContent=err.message}finally{if(submit)submit.disabled=false}};
