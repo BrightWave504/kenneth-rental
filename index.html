@@ -27,7 +27,7 @@
 #modal.rental-modal .rental-checkout{font-size:18px;padding:12px 24px;min-width:195px}
 #modal.rental-modal .rental-wallet{text-align:right;color:#66768d;font-size:12px;margin:14px 0 0}
 @media(max-width:550px){#modal.rental-modal .dialog{padding:20px 17px;border-radius:24px}#modal.rental-modal .rental-intro{grid-template-columns:95px 1fr;gap:12px}#modal.rental-modal .rental-brand img{width:85px;height:85px}#modal.rental-modal .rental-variants{gap:7px}#modal.rental-modal .rental-option .rental-price{font-size:14px}#modal.rental-modal .rental-option .rental-tile{min-height:104px;padding:8px 3px;border-radius:12px}#modal.rental-modal .rental-option .rental-hours{font-size:15px}#modal.rental-modal .rental-option .rental-detail{font-size:10px}#modal.rental-modal .rental-footer{justify-content:center}#modal.rental-modal .rental-wallet{text-align:center}}
-</style></head><body>
+ .terms-dialog{width:min(740px,100%)}.terms-list{line-height:1.65;padding-left:22px}.terms-list li{margin:12px 0}.terms-agree{display:flex;align-items:flex-start;gap:10px}.terms-agree input{width:auto;margin-top:4px}.auth button{max-width:100%} </style></head><body>
 <header><div class="brand">🔹 Kenneth <b>RentalShop</b></div><nav><button data-page="tools" class="active">Tools</button><button data-page="servers">Servers</button><button data-page="wallet">My Wallet</button><button data-page="rentals">Active Rentals</button><button data-page="billing">Billing</button><button data-page="history">History</button><button data-page="notifications">Notifications <span id="notificationCount"></span></button><button data-page="admin" id="adminNav" class="hidden">Admin</button></nav><div class="userbar"><div class="balance" id="balanceLink">💳 <b id="headerBalance">₱0.00</b></div><span id="who">Guest</span><button id="authBtn" class="primary">Login</button><button id="logoutBtn" class="hidden">Logout</button></div></header>
 <main>
 <section class="page active" id="tools"><h1>Software Account Rental</h1><div class="grid" id="toolGrid"></div></section>
@@ -45,8 +45,25 @@
 <div class="tabpage" id="tab-purchases"><div class="panel"><h2>All Purchases & Server Registrations</h2><div id="adminPurchaseSummary" class="notice"></div><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Type</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="adminPurchaseRows"></tbody></table></div></div></div>
 <div class="tabpage" id="tab-alerts"><div class="panel"><h2>Admin Notifications</h2><div id="adminAlerts"></div></div></div>
 </section>
-<section class="page" id="login"><div class="panel auth"><h1>Login</h1><form id="loginForm"><label>Email</label><input id="email" type="email" autocomplete="username" required><label>Password</label><input id="password" type="password" autocomplete="current-password" required><p><button class="primary" id="loginSubmit">Login</button></p></form><p id="loginMessage" role="status"></p><p>New customer? <button type="button" id="openSignup">Create Account</button></p><div id="signupPanel" class="hidden"><h2>Create Account</h2><form id="signupForm"><label>Email address</label><input id="signupEmail" type="email" autocomplete="email" required><label>Password (minimum 8 characters)</label><input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required><div class="notice"><b>Terms and Conditions</b><ol><li>Top-up reference numbers must be genuine and match an actual payment. A first confirmed invalid reference results in a warning; a second confirmed invalid reference results in an account ban, subject to appeal.</li><li>Payments and purchases are generally non-refundable, except where refunds are required by applicable law or expressly approved by Kenneth RentalShop.</li><li>Creating multiple accounts to evade restrictions or abuse services is prohibited. Suspicious accounts may be reviewed and suspended. Shared devices and IP addresses alone are not proof of abuse.</li></ol><p>For incorrect payment details or an account appeal, contact support using the link in the footer.</p></div><label style="display:flex;gap:9px;align-items:flex-start"><input id="signupAgree" type="checkbox" required style="width:auto;margin-top:3px">I have read and agree to the Terms and Conditions.</label><p><button type="submit" class="primary" id="signupSubmit">Create Account</button></p><p id="signupMessage" role="status"></p></form></div><div id="recoveryBox" class="hidden"><h2>Set New Password</h2><form id="recoveryForm"><label>New password</label><input id="newPassword" type="password" minlength="8" required><p><button class="primary">Update Password</button></p></form><p id="recoveryMessage"></p></div></div></section>
+<section class="page" id="login"><div class="panel auth"><h1>Welcome back</h1><p class="muted">Sign in to your Kenneth RentalShop account.</p><form id="loginForm"><label>Email address</label><input id="email" type="email" autocomplete="username" required><label>Password</label><input id="password" type="password" autocomplete="current-password" required><p><button class="primary" id="loginSubmit" type="submit">Log In</button></p></form><p id="loginMessage" role="status"></p><p><button id="openForgot" type="button">Forgot password?</button></p><p>Don't have an account? <button id="openSignup" type="button">Create Account</button></p></div></section>
+<section class="page" id="signup"><div class="panel auth"><h1>Create an account</h1><p class="muted">Fill out your details to register.</p><form id="signupForm"><label>Full name</label><input id="signupName" maxlength="120" autocomplete="name" required><label>Email address</label><input id="signupEmail" type="email" autocomplete="email" required><label>Phone number</label><input id="signupPhone" type="tel" maxlength="20" pattern="[+0-9 ()-]{7,20}" placeholder="e.g. +639123456789" autocomplete="tel" required><label>Password (at least 12 characters)</label><input id="signupPassword" type="password" minlength="12" maxlength="128" autocomplete="new-password" required><label>Confirm password</label><input id="signupConfirm" type="password" minlength="12" maxlength="128" autocomplete="new-password" required><p><button type="submit" class="primary" id="signupSubmit">Sign Up</button></p><p id="signupMessage" role="status"></p></form><p>Already registered? <button type="button" class="goLogin">Log In</button></p></div></section>
+<section class="page" id="signup-verify"><div class="panel auth"><h1>Verify your email</h1><p>Enter the six-digit code sent to <b id="signupVerifyEmail"></b>.</p><form id="signupVerifyForm"><label>Email OTP</label><input id="signupOtp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required placeholder="6-digit code"><p><button type="submit" class="primary">Verify Email & Create Account</button></p></form><p id="signupVerifyMessage" role="status"></p><button id="signupResend" type="button">Resend verification email</button></div></section>
+<section class="page" id="forgot"><div class="panel auth"><h1>Forgot password?</h1><p class="muted">Enter your registered email to receive a password-reset OTP.</p><form id="forgotForm"><label>Email address</label><input id="forgotEmail" type="email" autocomplete="email" required><p><button class="primary" type="submit">Send OTP</button></p></form><p id="forgotMessage" role="status"></p><p><button type="button" class="goLogin">Back to Log In</button></p></div></section>
+<section class="page" id="reset"><div class="panel auth"><h1>Reset password</h1><p>Enter the code sent to <b id="resetEmailLabel"></b> and choose a new password.</p><form id="resetForm"><label>6-digit email OTP</label><input id="resetOtp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required><label>New password</label><input id="resetPassword" type="password" minlength="12" maxlength="128" autocomplete="new-password" required><label>Confirm new password</label><input id="resetConfirm" type="password" minlength="12" maxlength="128" autocomplete="new-password" required><p><button class="primary" type="submit">Verify OTP & Reset Password</button></p></form><p id="resetMessage" role="status"></p><p><button type="button" class="goLogin">Back to Log In</button></p></div></section>
 </main><footer>Kenneth RentalShop © 2026 · <a href="https://www.messenger.com/j/AbZh4JBHX2UHVOcu/?send_source=gc%3Acopy_invite_link_c" target="_blank" rel="noopener">Contact Support</a> · <button type="button" id="viewTerms" class="small">Terms & Conditions</button></footer>
+<div class="modal" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsHeading"><div class="dialog terms-dialog"><div class="row"><h2 id="termsHeading">Terms &amp; Conditions</h2><button type="button" id="closeTerms" aria-label="Close">✕</button></div><h2>Terms &amp; Conditions</h2><p class="muted">Kenneth RentalShop · Effective November 2, 2026</p>
+<ol class="terms-list"><li><b>Account eligibility and accuracy.</b> You must provide accurate name, email and contact details, maintain a secure password, and use an email address you control. You are responsible for activity on your account unless caused by our failure to protect it.</li>
+<li><b>One genuine account.</b> Creating duplicate accounts to bypass bans, exploit promotions, or commit fraud is prohibited. Accounts may be reviewed for abuse. A shared IP address or device alone does not establish a violation.</li>
+<li><b>Verification.</b> You must verify your email before accessing a newly created account. Never disclose your OTP or password to anyone, including someone claiming to be support.</li>
+<li><b>Payments and wallet.</b> Top-ups are credited only after manual confirmation of funds received. You must provide the correct amount, reference number and payment date/time. Do not submit uncompleted or fabricated payments.</li>
+<li><b>Invalid payment references.</b> An independently confirmed false reference results in a formal warning on the first incident and account suspension on the second confirmed incident. Customers may contact support to dispute an incorrect finding; routine typos or unverified discrepancies should not automatically count as fraud.</li>
+<li><b>Pricing and availability.</b> Prices, service durations and stock are shown before checkout and may change for future purchases. A completed rental expires at the stated time and cannot be extended without another purchase.</li>
+<li><b>Use of software and services.</b> You must follow applicable laws, licensing requirements and device ownership rules. Do not use the service to access devices or accounts without authorization, evade security protections unlawfully, or redistribute rental credentials.</li>
+<li><b>Refunds.</b> Completed digital rentals, services and wallet transactions are generally non-refundable after delivery or processing, except where required by applicable law, where a paid service was not delivered as promised, or where Kenneth RentalShop expressly approves a refund. This policy does not waive statutory consumer rights.</li>
+<li><b>Account security and enforcement.</b> We may suspend accounts for verified fraud, unauthorized access, harassment, or repeated breaches. Where practicable, we provide notice and an opportunity to appeal. Device and IP signals may inform review but are not conclusive proof of wrongdoing.</li>
+<li><b>Personal information.</b> We collect your name, email, phone number, purchase records and payment references to operate accounts, process orders, provide support and prevent abuse. We do not ask for your OTP by chat. Contact support to request access, correction or deletion of eligible personal information, subject to lawful retention requirements.</li>
+<li><b>Service interruptions.</b> Maintenance, third-party outages, or provider restrictions may affect availability. We will make reasonable efforts to communicate material disruptions; your mandatory legal remedies remain available.</li>
+<li><b>Support and changes.</b> Contact the support link in the footer for disputes, billing concerns, and appeals. Material policy changes will be published before taking effect where required.</li></ol><div id="termsConsent" class="hidden"><label class="terms-agree"><input id="signupAgree" type="checkbox"> <span>I have read and agree to the Terms &amp; Conditions and understand the payment and account rules.</span></label><p><button type="button" class="primary" id="confirmSignup">Agree &amp; Send Verification OTP</button></p></div></div></div>
 <div class="modal" id="modal"><div class="dialog"><div class="row"><h2 id="modalTitle">Checkout</h2><button id="closeModal">✕</button></div><div id="modalBody"></div></div></div>
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -64,9 +81,68 @@ function adminTab(tab){if(!isAdmin())return;document.querySelectorAll('.tabpage'
 document.querySelectorAll('[data-page]').forEach(e=>e.onclick=()=>showPage(e.dataset.page));document.querySelectorAll('[data-tab]').forEach(e=>e.onclick=()=>adminTab(e.dataset.tab));$('balanceLink').onclick=()=>showPage(user?'wallet':'login');$('authBtn').onclick=()=>showPage('login');$('jumpTopup').onclick=()=>$('topupPanel').scrollIntoView({behavior:'smooth'});$('closeModal').onclick=()=>$('modal').classList.remove('show');$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').classList.remove('show')};
 async function refreshAccount(){const {data:{user:u}}=await supabase.auth.getUser();user=u;role=user?.app_metadata?.role==='admin'?'admin':'buyer';balance=0;if(user){const {data}=await supabase.from('profiles').select('wallet_balance').eq('user_id',user.id).single();balance=Number(data?.wallet_balance||0)}$('who').textContent=user?.email||'Guest';$('authBtn').classList.toggle('hidden',!!user);$('logoutBtn').classList.toggle('hidden',!user);$('adminNav').classList.toggle('hidden',!isAdmin());['headerBalance','walletBalance','billingBalance'].forEach(id=>$(id).textContent=money(balance))}
 $('loginForm').onsubmit=async e=>{e.preventDefault();$('loginSubmit').disabled=true;const {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});$('loginSubmit').disabled=false;$('loginMessage').textContent=error?error.message:'';if(error)return;$('password').value='';await refreshAccount();if(await enforceAccountBan())return;showPage(isAdmin()?'admin':'tools')};
-$('viewTerms').onclick=()=>{showPage('login');$('signupPanel').classList.remove('hidden');$('signupPanel').scrollIntoView({behavior:'smooth'})};
-$('openSignup').onclick=()=>{$('signupPanel').classList.toggle('hidden');if(!$('signupPanel').classList.contains('hidden'))$('signupEmail').focus()};
-$('signupForm').onsubmit=async e=>{e.preventDefault();const msg=$('signupMessage');msg.textContent='';if(!$('signupAgree').checked){msg.textContent='Please accept the Terms and Conditions.';return}const submit=$('signupSubmit');submit.disabled=true;try{const {data,error}=await supabase.auth.signUp({email:$('signupEmail').value.trim(),password:$('signupPassword').value,options:{data:{accepted_terms_version:'2026-11-02'}}});if(error)throw error;msg.textContent=data.session?'Account created. You are signed in.':'Registration submitted. Check your email to confirm your account before logging in.';$('signupForm').reset();if(data.session){await refreshAccount();showPage('tools')}}catch(err){msg.textContent=err.message}finally{submit.disabled=false}};
+let pendingSignup=null,pendingSignupEmail='',pendingResetEmail='';
+function openTerms(forSignup=false){$('termsConsent').classList.toggle('hidden',!forSignup);$('signupAgree').checked=false;$('termsModal').classList.add('show')}
+$('viewTerms').onclick=()=>openTerms(false);
+$('closeTerms').onclick=()=>$('termsModal').classList.remove('show');
+$('termsModal').onclick=e=>{if(e.target===$('termsModal'))$('termsModal').classList.remove('show')};
+$('openSignup').onclick=()=>showPage('signup');
+$('openForgot').onclick=()=>showPage('forgot');
+document.querySelectorAll('.goLogin').forEach(b=>b.onclick=()=>showPage('login'));
+$('signupForm').onsubmit=e=>{
+ e.preventDefault();$('signupMessage').textContent='';
+ const password=$('signupPassword').value;
+ if(password!==$('signupConfirm').value){$('signupMessage').textContent='Passwords do not match.';return}
+ if(password.length<12){$('signupMessage').textContent='Use a password with at least 12 characters.';return}
+ const name=$('signupName').value.trim(),email=$('signupEmail').value.trim().toLowerCase(),phone=$('signupPhone').value.trim();
+ if(!name||!email||!phone){$('signupMessage').textContent='Complete all fields.';return}
+ pendingSignup={name,email,phone,password};openTerms(true);
+};
+$('confirmSignup').onclick=async()=>{
+ if(!pendingSignup)return;
+ if(!$('signupAgree').checked){alert('Please read and accept the Terms & Conditions.');return}
+ const button=$('confirmSignup');button.disabled=true;
+ try{
+  const {data,error}=await supabase.auth.signUp({email:pendingSignup.email,password:pendingSignup.password,options:{data:{full_name:pendingSignup.name,phone_number:pendingSignup.phone,accepted_terms_version:'2026-11-02'}}});
+  if(error)throw error;
+  if(data.session){await supabase.auth.signOut();throw Error('Email confirmation is not enabled in Supabase. Enable Confirm email before accepting new signups.');}
+  pendingSignupEmail=pendingSignup.email;
+  $('signupVerifyEmail').textContent=pendingSignupEmail;
+  $('termsModal').classList.remove('show');showPage('signup-verify');
+  $('signupVerifyMessage').textContent='Check your inbox for the six-digit verification code.';
+ }catch(err){$('termsModal').classList.remove('show');$('signupMessage').textContent=err.message;showPage('signup')}
+ finally{button.disabled=false}
+};
+$('signupVerifyForm').onsubmit=async e=>{
+ e.preventDefault();const msg=$('signupVerifyMessage');msg.textContent='Verifying...';
+ const {error}=await supabase.auth.verifyOtp({email:pendingSignupEmail,token:$('signupOtp').value.trim(),type:'email'});
+ if(error){msg.textContent=error.message;return}
+ await supabase.auth.signOut();await refreshAccount();pendingSignup=null;$('signupForm').reset();$('signupOtp').value='';
+ showPage('login');$('email').value=pendingSignupEmail;$('loginMessage').textContent='Email verified! Your account is ready. Please log in.';
+};
+$('signupResend').onclick=async()=>{
+ if(!pendingSignupEmail)return;
+ const {error}=await supabase.auth.resend({type:'signup',email:pendingSignupEmail});
+ $('signupVerifyMessage').textContent=error?error.message:'A new verification code was requested. Check your inbox.';
+};
+$('forgotForm').onsubmit=async e=>{
+ e.preventDefault();pendingResetEmail=$('forgotEmail').value.trim().toLowerCase();
+ const {error}=await supabase.auth.resetPasswordForEmail(pendingResetEmail,{redirectTo:location.origin+location.pathname});
+ if(error){$('forgotMessage').textContent=error.message;return}
+ $('resetEmailLabel').textContent=pendingResetEmail;showPage('reset');
+ $('resetMessage').textContent='If this account exists, a reset code has been sent to its email address.';
+};
+$('resetForm').onsubmit=async e=>{
+ e.preventDefault();const msg=$('resetMessage'),password=$('resetPassword').value;
+ if(password!==$('resetConfirm').value){msg.textContent='Passwords do not match.';return}
+ if(password.length<12){msg.textContent='Password must be at least 12 characters.';return}
+ const {error}=await supabase.auth.verifyOtp({email:pendingResetEmail,token:$('resetOtp').value.trim(),type:'recovery'});
+ if(error){msg.textContent=error.message;return}
+ const {error:updateError}=await supabase.auth.updateUser({password});
+ if(updateError){msg.textContent=updateError.message;return}
+ await supabase.auth.signOut();await refreshAccount();$('resetForm').reset();showPage('login');$('email').value=pendingResetEmail;
+ $('loginMessage').textContent='Password changed successfully. Log in with your new password.';
+};
 async function enforceAccountBan(){if(!user||isAdmin())return false;const {data,error}=await supabase.rpc('account_access_status');if(error){console.error('Account access check failed:',error);await supabase.auth.signOut();await refreshAccount();showPage('login');$('loginMessage').textContent='Account verification temporarily unavailable. Please try again.';return true}if(data?.banned){await supabase.auth.signOut();await refreshAccount();showPage('login');$('loginMessage').textContent='Account banned: '+(data.reason||'Policy violation')+'. Contact support to appeal.';return true}return false}
 $('logoutBtn').onclick=async()=>{await supabase.auth.signOut();await refreshAccount();showPage('tools')};
 async function loadCatalog(){const [a,b,c,d]=await Promise.all([supabase.from('rental_products').select('*').eq('enabled',true).order('name'),supabase.from('rental_prices').select('*'),supabase.from('server_products').select('*').eq('enabled',true),supabase.rpc('rental_variant_availability')]);if(a.error||b.error||c.error||d.error){console.error(a.error||b.error||c.error||d.error);alert('Unable to load product availability: '+(a.error||b.error||c.error||d.error).message)}catalog=a.data||[];prices=b.data||[];servers=c.data||[];availability=d.data||[];renderCatalog()}
@@ -327,7 +403,11 @@ async function loadAdminPurchases(){
  if(!entries.length)tbody.append(row(['No purchases or registrations yet.']));
 }
 async function loadNotifications(admin){const q=supabase.from('shop_notifications').select('*').order('created_at',{ascending:false}).limit(100);const {data,error}=await q;const dest=$(admin?'adminAlerts':'notificationList');dest.replaceChildren();if(error){empty(dest,error.message);return}const items=(data||[]).filter(n=>admin?n.user_id===null:n.user_id===user?.id);for(const n of items){const div=node('div',undefined,'cardline');div.append(node('b',n.title),node('p',n.body),node('small',new Date(n.created_at).toLocaleString()));dest.append(div)}if(!items.length)empty(dest,'No notifications.');$('notificationCount').textContent=admin?'':items.filter(n=>!n.read_at).length?'●':''}
-supabase.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY'){$('recoveryBox').classList.remove('hidden');showPage('login')}});
-$('recoveryForm').onsubmit=async e=>{e.preventDefault();const {error}=await supabase.auth.updateUser({password:$('newPassword').value});$('recoveryMessage').textContent=error?error.message:'Password updated successfully.';if(!error){$('newPassword').value='';$('recoveryBox').classList.add('hidden')}};
+supabase.auth.onAuthStateChange(event=>{
+ if(event==='PASSWORD_RECOVERY'){
+  const email=($('forgotEmail').value||'').trim().toLowerCase();
+  if(email){pendingResetEmail=email;$('resetEmailLabel').textContent=email;showPage('reset');}
+ }
+});
 await loadCatalog();await refreshAccount();if(!(await enforceAccountBan()))showPage(isAdmin()?'admin':'tools');
 </script></body></html>
