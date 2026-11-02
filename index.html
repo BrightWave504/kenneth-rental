@@ -27,7 +27,69 @@
 #modal.rental-modal .rental-checkout{font-size:18px;padding:12px 24px;min-width:195px}
 #modal.rental-modal .rental-wallet{text-align:right;color:#66768d;font-size:12px;margin:14px 0 0}
 @media(max-width:550px){#modal.rental-modal .dialog{padding:20px 17px;border-radius:24px}#modal.rental-modal .rental-intro{grid-template-columns:95px 1fr;gap:12px}#modal.rental-modal .rental-brand img{width:85px;height:85px}#modal.rental-modal .rental-variants{gap:7px}#modal.rental-modal .rental-option .rental-price{font-size:14px}#modal.rental-modal .rental-option .rental-tile{min-height:104px;padding:8px 3px;border-radius:12px}#modal.rental-modal .rental-option .rental-hours{font-size:15px}#modal.rental-modal .rental-option .rental-detail{font-size:10px}#modal.rental-modal .rental-footer{justify-content:center}#modal.rental-modal .rental-wallet{text-align:center}}
- .terms-dialog{width:min(740px,100%)}.terms-list{line-height:1.65;padding-left:22px}.terms-list li{margin:12px 0}.terms-agree{display:flex;align-items:flex-start;gap:10px}.terms-agree input{width:auto;margin-top:4px}.auth button{max-width:100%} </style></head><body>
+ .terms-dialog{width:min(740px,100%)}.terms-list{line-height:1.65;padding-left:22px}.terms-list li{margin:12px 0}.terms-agree{display:flex;align-items:flex-start;gap:10px}.terms-agree input{width:auto;margin-top:4px}.auth button{max-width:100%} /* Mobile-only interface. Desktop styles and application logic remain unchanged. */
+@media screen and (max-width: 700px) {
+  html { -webkit-text-size-adjust:100%; scroll-padding-top:16px; }
+  body { background:#f4f7fc; overflow-x:hidden; }
+  header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px 8px; padding:14px 14px 10px; align-items:center; }
+  header .brand { width:auto; min-width:0; margin:0; font-size:19px; letter-spacing:-.5px; }
+  header .userbar { grid-column:2; grid-row:1; gap:6px; justify-content:flex-end; min-width:0; }
+  header .userbar #who { display:none; }
+  header .userbar .balance { padding:8px 10px; font-size:12px; white-space:nowrap; }
+  header .userbar button { padding:8px 10px; font-size:12px; }
+  header nav { grid-column:1 / -1; display:flex; flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none; gap:7px; padding:4px 0 8px; margin:0 -14px; padding-left:14px; padding-right:14px; }
+  header nav::-webkit-scrollbar { display:none; }
+  header nav button { flex:0 0 auto; white-space:nowrap; border-radius:999px; padding:10px 13px; font-size:13px; }
+  main { margin:16px auto 26px; padding:0 13px; min-height:60vh; width:100%; }
+  h1 { font-size:23px; line-height:1.2; margin:12px 0 17px; }
+  h2 { font-size:19px; }
+  h3 { font-size:16px; }
+  .panel { padding:17px 15px; border-radius:16px; margin:14px 0; box-shadow:0 5px 18px #193e720b; }
+  .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+  .product { min-width:0; background:#fff; border:1px solid #e5eaf3; border-radius:16px; padding:11px 9px 13px; }
+  .product .art { height:116px; margin-bottom:11px; border-radius:13px; box-shadow:none; background:#f8faff; }
+  .product .art img { max-height:90px; max-width:86%; }
+  .product button { min-width:0; width:100%; padding:10px 5px; font-size:12px; line-height:1.3; overflow-wrap:anywhere; }
+  .product small { display:block; margin-top:7px; font-size:11px; }
+  .wallet { padding:21px 19px; border-radius:18px; }
+  .wallet strong { font-size:33px; }
+  .split { grid-template-columns:minmax(0,1fr); gap:4px; }
+  .row { gap:9px; }
+  .row > h1, .row > h2 { min-width:0; }
+  #admin > .row { align-items:flex-start; }
+  #openAdminOwnPassword { font-size:12px; padding:10px; }
+  .tabs { flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none; margin:0 -13px 12px; padding:3px 13px 10px; gap:7px; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tabs button { flex:0 0 auto; white-space:nowrap; font-size:12px; border-radius:999px; padding:10px 12px; }
+  .tablewrap { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid #edf0f5; border-radius:12px; }
+  table { min-width:560px; font-size:12px; }
+  #tab-accounts table { min-width:610px; }
+  td,th { padding:11px 9px; }
+  td button { margin:3px 4px 3px 0; font-size:11px; padding:8px 9px; }
+  .manage-product { align-items:flex-start; }
+  .manage-product .info { min-width:0; flex:1 1 100%; }
+  .manage-product .actions { width:100%; }
+  .manage-product .actions button { min-width:0; flex:1 1 auto; }
+  .modal { padding:10px; align-items:center; }
+  .dialog { width:100%; max-height:88dvh; padding:19px 16px; border-radius:19px; }
+  .auth { max-width:100%; }
+  input, select, textarea { font-size:16px; max-width:100%; }
+  input[type="checkbox"] { width:auto; }
+  button { touch-action:manipulation; }
+  .notice { padding:12px; font-size:13px; line-height:1.5; }
+  .qr { max-width:260px; }
+  footer { padding:22px 14px; font-size:12px; line-height:1.8; }
+}
+@media screen and (max-width: 370px) {
+  header .brand { font-size:17px; }
+  header .userbar .balance { font-size:11px; padding:7px; }
+  .grid { gap:8px; }
+  .product { padding:8px 6px 11px; }
+  .product .art { height:100px; }
+  #admin > .row { display:block; }
+  #openAdminOwnPassword { margin-bottom:9px; }
+}
+</style></head><body>
 <header><div class="brand">🔹 Kenneth <b>RentalShop</b></div><nav><button data-page="tools" class="active">Tools</button><button data-page="servers">Servers</button><button data-page="wallet">My Wallet</button><button data-page="rentals">Active Rentals</button><button data-page="billing">Billing</button><button data-page="history">History</button><button data-page="notifications">Notifications <span id="notificationCount"></span></button><button data-page="admin" id="adminNav" class="hidden">Admin</button></nav><div class="userbar"><div class="balance" id="balanceLink">💳 <b id="headerBalance">₱0.00</b></div><span id="who">Guest</span><button id="authBtn" class="primary">Login</button><button id="logoutBtn" class="hidden">Logout</button></div></header>
 <main>
 <section class="page active" id="tools"><h1>Software Account Rental</h1><div class="grid" id="toolGrid"></div></section>
